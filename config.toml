@@ -1,5 +1,5 @@
 theme = "coder"
-baseURL = "http://localhost:1313"
+baseURL = "https://abhipray.com/"
 languageCode = "en-us"
 title = "embedded sigproc"
 
@@ -11,6 +11,7 @@ pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
 publishDir = "docs"
 disqusShortname = "embedded-sigproc"
+googleAnalytics = "UA-127997927-1"
 
 [params]
     author = "Abhipray Sahoo"

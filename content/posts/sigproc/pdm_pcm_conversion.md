@@ -1,6 +1,6 @@
 
 +++ 
-date = "2018-10-22"
+date = "2018-10-24"
 title = "PDM-PCM conversion & PDM's connection to neurons"
 +++
 
@@ -282,7 +282,7 @@ plot_periodogram(x_pdm, fs*oversample_rate)
 
 # PDM -> PCM
 
-To convert PDM back to PCM, we need to (a) apply a low-pass filter with a cut-off at the base-band audio frequency (b) reduce the sample rate back to the original (c) change the number of bits per amplitude from 1-bit to the desired bit depth.
+To convert PDM back to PCM, we need to (i) apply a low-pass filter with a cut-off at the base-band audio frequency (ii) reduce the sample rate back to the original (iii) change the number of bits per amplitude from 1-bit to the desired bit depth.
 
 
 
@@ -367,7 +367,8 @@ Corresponding sample rate: {}Hz".format(delta_t_min, fs_neuron))
 # Create the PDM signal
 i = 0
 pdm_neuron = []
-for t in np.arange(0, max(spike_times), delta_t_min):
+pdm_t = np.arange(0, max(spike_times), delta_t_min)
+for t in pdm_t:
     if spike_times[i] > t and spike_times[i] < t + delta_t_min:
         i += 1
         pdm_neuron.append(1)
@@ -377,19 +378,12 @@ pdm_neuron = np.array(pdm_neuron)
 
 
 ```python
-plt.plot(pdm_neuron[0:3000]);
-plt.title("Neuron Spike Train as PDM signal")
+plt.plot(pdm_t[0:3000], pdm_neuron[0:3000]);
+plt.title("Neuron Spike Train as PDM signal"); plt.xlabel('Time(s)');
 ```
 
 
-
-
-    Text(0.5,1,'Neuron Spike Train as PDM signal')
-
-
-
-
-![png](pdm_pcm_conversion_40_1.png)
+![png](pdm_pcm_conversion_40_0.png)
 
 
 
@@ -408,18 +402,11 @@ plt.title("PSD of neuron spike train");
 # PSD energy is concentrated in the low frequencies so zoom in or alternatively, decimate 
 plot_periodogram(pdm_neuron, fs_neuron);
 plt.title("PSD of neuron spike train");
-plt.xlim(0, 10)
+plt.xlim(0, 10);
 ```
 
 
-
-
-    (0, 10)
-
-
-
-
-![png](pdm_pcm_conversion_42_1.png)
+![png](pdm_pcm_conversion_42_0.png)
 
 
 # Conclusion
