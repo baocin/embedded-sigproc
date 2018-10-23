@@ -1,6 +1,6 @@
 
 +++ 
-date = "2018-10-24"
+date = "2018-10-23"
 title = "PDM-PCM conversion & PDM's connection to neurons"
 +++
 
@@ -114,7 +114,7 @@ pcm_mse = sum(pcm_err**2)/pcm_err.size
 print("MSE: {} MSE(dB): {}".format(pcm_mse, 10*np.log10(pcm_mse)))
 ```
 
-    MSE: 3.157667038967621e-10 MSE(dB): -95.00633666209498
+    MSE: 3.1576670389676946e-10 MSE(dB): -95.00633666209488
 
 
 The error is really small -- just ~3e-10. But if were to use fewer bits, the average quantization error would be substantial. And it would be maximum if we were to use just one bit.

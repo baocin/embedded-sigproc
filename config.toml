@@ -12,6 +12,7 @@ pygmentscodefencesguesssyntax = true
 publishDir = "docs"
 disqusShortname = "embedded-sigproc"
 googleAnalytics = "UA-127997927-1"
+canonifyurls = false
 
 [params]
     author = "Abhipray Sahoo"

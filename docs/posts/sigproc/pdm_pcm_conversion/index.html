@@ -14,7 +14,7 @@
   PDM-PCM conversion &amp; PDM&#39;s connection to neurons · embedded sigproc
 </title>
 
-    <link rel="canonical" href="http://localhost:1313/posts/sigproc/pdm_pcm_conversion/">
+    <link rel="canonical" href="https://abhipray.com/posts/sigproc/pdm_pcm_conversion/">
 
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Merriweather:300,700|Source+Code+Pro:400,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous" />
@@ -29,11 +29,11 @@
     
 
     
-      <link rel="stylesheet" href="http://localhost:1313/css/custom.css">
+      <link rel="stylesheet" href="https://abhipray.com/css/custom.css">
     
 
-    <link rel="icon" type="image/png" href="http://localhost:1313/img/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="http://localhost:1313/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="https://abhipray.com/img/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://abhipray.com/img/favicon-16x16.png" sizes="16x16">
 
     
 
@@ -61,7 +61,7 @@ MathJax.Hub.Config({
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
-    <a class="navigation-title" href="http://localhost:1313">
+    <a class="navigation-title" href="https://abhipray.com/">
       embedded sigproc
     </a>
     <input type="checkbox" id="menu-toggle" />
@@ -71,10 +71,6 @@ MathJax.Hub.Config({
         
           <li class="navigation-item">
             <a class="navigation-link" href="../../../posts/">Blog</a>
-          </li>
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="../../../about/">About</a>
           </li>
         
       
@@ -95,8 +91,8 @@ MathJax.Hub.Config({
         <div class="post-meta">
           <span class="posted-on">
             <i class="far fa-calendar"></i>
-            <time datetime='2018-10-22T00:00:00Z'>
-              October 22, 2018
+            <time datetime='2018-10-23T00:00:00Z'>
+              October 23, 2018
             </time>
           </span>
           <span class="reading-time">
@@ -201,7 +197,7 @@ plt.ylabel(<span style="color:#0ff;font-weight:bold">&#39;Amplitude (1-bit)&#39;
 <p>The source of error in the conversion of analog to PCM is quantization. In our example, the mean squared error introduced by quantization is:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pcm_err = x_discrete - (x_pcm.astype(np.<span style="color:#fff;font-weight:bold">float</span>)/<span style="color:#ff0;font-weight:bold">2</span>**(b-<span style="color:#ff0;font-weight:bold">1</span>)) <span style="color:#007f7f"># Rough estimate</span>
 pcm_mse = <span style="color:#fff;font-weight:bold">sum</span>(pcm_err**<span style="color:#ff0;font-weight:bold">2</span>)/pcm_err.size
-<span style="color:#fff;font-weight:bold">print</span>(<span style="color:#0ff;font-weight:bold">&#34;MSE: {} MSE(dB): {}&#34;</span>.format(pcm_mse, <span style="color:#ff0;font-weight:bold">10</span>*np.log10(pcm_mse)))</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">MSE: 3.157667038967621e-10 MSE(dB): -95.00633666209498</pre></div>
+<span style="color:#fff;font-weight:bold">print</span>(<span style="color:#0ff;font-weight:bold">&#34;MSE: {} MSE(dB): {}&#34;</span>.format(pcm_mse, <span style="color:#ff0;font-weight:bold">10</span>*np.log10(pcm_mse)))</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">MSE: 3.1576670389676946e-10 MSE(dB): -95.00633666209488</pre></div>
 <p>The error is really small &ndash; just ~3e-10. But if were to use fewer bits, the average quantization error would be substantial. And it would be maximum if we were to use just one bit.</p>
 
 <p>Quantization error is best understood when modeled as uniformly distributed uncorrelated additive noise. The uniformly distributed quantization noise is related to the number of bits with the following equation:</p>
@@ -308,7 +304,7 @@ plt.plot(x_pdm[<span style="color:#ff0;font-weight:bold">0</span>:<span style="c
 
 <h1 id="pdm-pcm">PDM -&gt; PCM</h1>
 
-<p>To convert PDM back to PCM, we need to (a) apply a low-pass filter with a cut-off at the base-band audio frequency (b) reduce the sample rate back to the original &copy; change the number of bits per amplitude from 1-bit to the desired bit depth.</p>
+<p>To convert PDM back to PCM, we need to (i) apply a low-pass filter with a cut-off at the base-band audio frequency (ii) reduce the sample rate back to the original (iii) change the number of bits per amplitude from 1-bit to the desired bit depth.</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#fff;font-weight:bold">def</span> pdm_to_pcm(pdm, oversample_rate, b):
     <span style="color:#0ff;font-weight:bold">&#34;&#34;&#34;Convert a pdm signal into a pcm signal with b bits &#34;&#34;&#34;</span>
     <span style="color:#007f7f"># decimate function uses an anti-aliasing low-pass filter</span>
@@ -347,14 +343,15 @@ fs_neuron = <span style="color:#ff0;font-weight:bold">1</span>/delta_t_min
 </span><span style="color:#0ff;font-weight:bold"></span><span style="color:#0ff;font-weight:bold">Corresponding sample rate: {}Hz&#34;</span>.format(delta_t_min, fs_neuron))</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">Minimum time resolution needed is [0.00033333] seconds. Corresponding sample rate: [3000.]Hz</pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#007f7f"># Create the PDM signal</span>
 i = <span style="color:#ff0;font-weight:bold">0</span>
 pdm_neuron = []
-<span style="color:#fff;font-weight:bold">for</span> t in np.arange(<span style="color:#ff0;font-weight:bold">0</span>, <span style="color:#fff;font-weight:bold">max</span>(spike_times), delta_t_min):
+pdm_t = np.arange(<span style="color:#ff0;font-weight:bold">0</span>, <span style="color:#fff;font-weight:bold">max</span>(spike_times), delta_t_min)
+<span style="color:#fff;font-weight:bold">for</span> t in pdm_t:
     <span style="color:#fff;font-weight:bold">if</span> spike_times[i] &gt; t and spike_times[i] &lt; t + delta_t_min:
         i += <span style="color:#ff0;font-weight:bold">1</span>
         pdm_neuron.append(<span style="color:#ff0;font-weight:bold">1</span>)
     pdm_neuron.append(-<span style="color:#ff0;font-weight:bold">1</span>)
-pdm_neuron = np.array(pdm_neuron)</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt.plot(pdm_neuron[<span style="color:#ff0;font-weight:bold">0</span>:<span style="color:#ff0;font-weight:bold">3000</span>]);
-plt.title(<span style="color:#0ff;font-weight:bold">&#34;Neuron Spike Train as PDM signal&#34;</span>)</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">Text(0.5,1,&#39;Neuron Spike Train as PDM signal&#39;)</pre></div>
-<p><img src="pdm_pcm_conversion_40_1.png" alt="png" /></p>
+pdm_neuron = np.array(pdm_neuron)</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt.plot(pdm_t[<span style="color:#ff0;font-weight:bold">0</span>:<span style="color:#ff0;font-weight:bold">3000</span>], pdm_neuron[<span style="color:#ff0;font-weight:bold">0</span>:<span style="color:#ff0;font-weight:bold">3000</span>]);
+plt.title(<span style="color:#0ff;font-weight:bold">&#34;Neuron Spike Train as PDM signal&#34;</span>); plt.xlabel(<span style="color:#0ff;font-weight:bold">&#39;Time(s)&#39;</span>);</code></pre></div>
+<p><img src="pdm_pcm_conversion_40_0.png" alt="png" /></p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt.figure()
 plot_periodogram(pdm_neuron, fs_neuron);
 plt.title(<span style="color:#0ff;font-weight:bold">&#34;PSD of neuron spike train&#34;</span>);</code></pre></div>
@@ -362,8 +359,8 @@ plt.title(<span style="color:#0ff;font-weight:bold">&#34;PSD of neuron spike tra
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#007f7f"># PSD energy is concentrated in the low frequencies so zoom in or alternatively, decimate </span>
 plot_periodogram(pdm_neuron, fs_neuron);
 plt.title(<span style="color:#0ff;font-weight:bold">&#34;PSD of neuron spike train&#34;</span>);
-plt.xlim(<span style="color:#ff0;font-weight:bold">0</span>, <span style="color:#ff0;font-weight:bold">10</span>)</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">(0, 10)</pre></div>
-<p><img src="pdm_pcm_conversion_42_1.png" alt="png" /></p>
+plt.xlim(<span style="color:#ff0;font-weight:bold">0</span>, <span style="color:#ff0;font-weight:bold">10</span>);</code></pre></div>
+<p><img src="pdm_pcm_conversion_42_0.png" alt="png" /></p>
 
 <h1 id="conclusion">Conclusion</h1>
 
@@ -405,8 +402,6 @@ plt.xlim(<span style="color:#ff0;font-weight:bold">0</span>, <span style="color:
       <footer class="footer">
   <section class="container">
     
-      <p>Enter a text here.</p>
-    
      © 2018
     
        · 
@@ -419,6 +414,19 @@ plt.xlim(<span style="color:#ff0;font-weight:bold">0</span>, <span style="color:
     </main>
 
     
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-127997927-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
 
   </body>
 
