@@ -9,7 +9,7 @@ relativeURLs = true
 pygmentsstyle = "b2"
 pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
-
+publishDir = "docs"
 disqusShortname = "embedded-sigproc"
 
 [params]

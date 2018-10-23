@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on embedded sigproc</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on embedded sigproc</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 22 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>PDM-PCM conversion &amp; PDM&#39;s connection to neurons</title>
+      <link>http://localhost:1313/posts/sigproc/pdm_pcm_conversion/</link>
+      <pubDate>Mon, 22 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/sigproc/pdm_pcm_conversion/</guid>
+      <description>Background In the context of digital audio systems, PDM is a common interface between microphones and microcontrollers/signal processors. PDM signals represent analog audio signals by sampling the at a very high rate with a single bit resolution (on/off) for the amplitude. This encodes the analog signal in the density of the pulses and hence the name, Pulse Density Modulation.
+For example, if you want the microphone to record an analog audio signal with a bandwidth of 24KHz (FNyquist), you sample it at say 3.</description>
+    </item>
+    
+  </channel>
+</rss>
