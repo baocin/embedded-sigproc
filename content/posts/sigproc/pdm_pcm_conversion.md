@@ -114,7 +114,7 @@ pcm_mse = sum(pcm_err**2)/pcm_err.size
 print("MSE: {} MSE(dB): {}".format(pcm_mse, 10*np.log10(pcm_mse)))
 ```
 
-    MSE: 3.1576670389676946e-10 MSE(dB): -95.00633666209488
+    MSE: 3.157667038967621e-10 MSE(dB): -95.00633666209498
 
 
 The error is really small -- just ~3e-10. But if were to use fewer bits, the average quantization error would be substantial. And it would be maximum if we were to use just one bit.
@@ -216,14 +216,14 @@ $x_Q[k] = \mathcal{Q} \{ x[k] - e[k] * h[k] \} = x[k] + e[k] - e[k] * h[k]$
 
 $h[k] = \delta[k-1]$ which is simply delaying the error signal by one sample.
 
-The final difference equation for a quantizer with noise shaping looks like:
+The final difference equation for a quantizer with first-order noise shaping is:
 $y[n] = x[n] + e[n] - e[n-1]$
 
-The noise is shaped by $e[k] = e[k] - e[k] * h[k]$. To see this, we can filter the uniform quantization noise with $h[k]$.
+The noise is shaped by $e[k] = e[k] - e[k] * h[k]$. To see this, we can filter the uniform quantization noise with $1 - h[k]$ where $h[k]$ is the delay impulse.
 
 
 ```python
-b = np.array([1, -1]) # Filter coefficients of h[k]
+b = np.array([1, -1]) # Filter coefficients of 1 - z^-1
 quant_noise_shaped = signal.lfilter(b, np.array([1]), quant_noise);
 plot_periodogram(quant_noise_shaped, fs*L)
 ```
@@ -414,3 +414,9 @@ plt.xlim(0, 10);
 The algorithm to go between PCM and PDM is a clever one that utilizes modeling of quantization as statistical noise. Through oversampling and noise shaping, we reduce the effects of the quantization noise on a 1-bit signal.
 
 tl; dr conversion routines: [PCM->PDM](#completing-the-picture) & [PDM->PCM](#pdm-pcm)
+
+## References
+
+1. [Understanding PDM Digital Audio](http://users.ece.utexas.edu/~bevans/courses/rtdsp/lectures/10_Data_Conversion/AP_Understanding_PDM_Digital_Audio.pdf)
+2. Discrete-Time Signal Processing, Oppenheim & Schafer
+3. [Note on the spectral analysis of neural spike trains, P. J. A. LagoN. B. Jones ](https://link.springer.com/article/10.1007/BF02441849)

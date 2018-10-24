@@ -16,10 +16,10 @@ canonifyurls = false
 
 [params]
     author = "Abhipray Sahoo"
-    info = "Engineer"
-    description = "Blog"
-    keywords = "blog,developer,personal"
-    avatarurl = "images/avatar.jpg"
+    info = "Engineer - Student"
+    description = "Journal"
+    keywords = "audio, embedded systems, signal processing"
+    avatarurl = "images/Abhi.jpg"
 
     favicon_32 = "/img/favicon-32x32.png"
     favicon_16 = "/img/favicon-16x16.png"
@@ -45,9 +45,14 @@ canonifyurls = false
     icon = "fab fa-twitter fa-2x"
     weight = 3
     url = "https://twitter.com/abhipray42/"
+[[params.social]]
+    name = "Linkedin"
+    icon = "fab fa-linkedin fa-2x"
+    weight = 3
+    url = "https://www.linkedin.com/in/abhipray-sahoo-92b9b13a/"    
 
 # Menu links
 [[menu.main]]
-    name = "Blog"
+    name = "Posts"
     weight = 1
     url  = "/posts/"
