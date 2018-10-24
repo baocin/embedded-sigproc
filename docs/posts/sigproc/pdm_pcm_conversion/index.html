@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="author" content="Abhipray Sahoo">
-    <meta name="description" content="Blog">
-    <meta name="keywords" content="blog,developer,personal">
+    <meta name="description" content="Journal">
+    <meta name="keywords" content="audio, embedded systems, signal processing">
 
     
     <title>
@@ -49,6 +49,7 @@ MathJax.Hub.Config({
     displayMath: [['$$','$$']],
     processEscapes: true,
     processEnvironments: true,
+    displayAlign: "center",
     skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code'],
     TeX: { equationNumbers: { autoNumber: "AMS" },
          extensions: ["AMSmath.js", "AMSsymbols.js"] }
@@ -70,7 +71,7 @@ MathJax.Hub.Config({
       
         
           <li class="navigation-item">
-            <a class="navigation-link" href="../../../posts/">Blog</a>
+            <a class="navigation-link" href="../../../posts/">Posts</a>
           </li>
         
       
@@ -116,7 +117,10 @@ MathJax.Hub.Config({
 </ul></li>
 <li><a href="#pdm-pcm">PDM -&gt; PCM</a></li>
 <li><a href="#connection-to-neurons">Connection to neurons</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#conclusion">Conclusion</a>
+<ul>
+<li><a href="#references">References</a></li>
+</ul></li>
 </ul>
 </nav>
       </div>
@@ -197,7 +201,7 @@ plt.ylabel(<span style="color:#0ff;font-weight:bold">&#39;Amplitude (1-bit)&#39;
 <p>The source of error in the conversion of analog to PCM is quantization. In our example, the mean squared error introduced by quantization is:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pcm_err = x_discrete - (x_pcm.astype(np.<span style="color:#fff;font-weight:bold">float</span>)/<span style="color:#ff0;font-weight:bold">2</span>**(b-<span style="color:#ff0;font-weight:bold">1</span>)) <span style="color:#007f7f"># Rough estimate</span>
 pcm_mse = <span style="color:#fff;font-weight:bold">sum</span>(pcm_err**<span style="color:#ff0;font-weight:bold">2</span>)/pcm_err.size
-<span style="color:#fff;font-weight:bold">print</span>(<span style="color:#0ff;font-weight:bold">&#34;MSE: {} MSE(dB): {}&#34;</span>.format(pcm_mse, <span style="color:#ff0;font-weight:bold">10</span>*np.log10(pcm_mse)))</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">MSE: 3.1576670389676946e-10 MSE(dB): -95.00633666209488</pre></div>
+<span style="color:#fff;font-weight:bold">print</span>(<span style="color:#0ff;font-weight:bold">&#34;MSE: {} MSE(dB): {}&#34;</span>.format(pcm_mse, <span style="color:#ff0;font-weight:bold">10</span>*np.log10(pcm_mse)))</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">MSE: 3.157667038967621e-10 MSE(dB): -95.00633666209498</pre></div>
 <p>The error is really small &ndash; just ~3e-10. But if were to use fewer bits, the average quantization error would be substantial. And it would be maximum if we were to use just one bit.</p>
 
 <p>Quantization error is best understood when modeled as uniformly distributed uncorrelated additive noise. The uniformly distributed quantization noise is related to the number of bits with the following equation:</p>
@@ -264,11 +268,11 @@ $x_Q[k] = \mathcal{Q} { x[k] - e[k] * h[k] } = x[k] + e[k] - e[k] * h[k]$</p>
 
 <p>$h[k] = \delta[k-1]$ which is simply delaying the error signal by one sample.</p>
 
-<p>The final difference equation for a quantizer with noise shaping looks like:
+<p>The final difference equation for a quantizer with first-order noise shaping is:
 $y[n] = x[n] + e[n] - e[n-1]$</p>
 
-<p>The noise is shaped by $e[k] = e[k] - e[k] * h[k]$. To see this, we can filter the uniform quantization noise with $h[k]$.</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">b = np.array([<span style="color:#ff0;font-weight:bold">1</span>, -<span style="color:#ff0;font-weight:bold">1</span>]) <span style="color:#007f7f"># Filter coefficients of h[k]</span>
+<p>The noise is shaped by $e[k] = e[k] - e[k] * h[k]$. To see this, we can filter the uniform quantization noise with $1 - h[k]$ where $h[k]$ is the delay impulse.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">b = np.array([<span style="color:#ff0;font-weight:bold">1</span>, -<span style="color:#ff0;font-weight:bold">1</span>]) <span style="color:#007f7f"># Filter coefficients of 1 - z^-1</span>
 quant_noise_shaped = signal.lfilter(b, np.array([<span style="color:#ff0;font-weight:bold">1</span>]), quant_noise);
 plot_periodogram(quant_noise_shaped, fs*L)</code></pre></div>
 <p><img src="pdm_pcm_conversion_23_0.png" alt="png" /></p>
@@ -367,6 +371,14 @@ plt.xlim(<span style="color:#ff0;font-weight:bold">0</span>, <span style="color:
 <p>The algorithm to go between PCM and PDM is a clever one that utilizes modeling of quantization as statistical noise. Through oversampling and noise shaping, we reduce the effects of the quantization noise on a 1-bit signal.</p>
 
 <p>tl; dr conversion routines: <a href="#completing-the-picture">PCM-&gt;PDM</a> &amp; <a href="#pdm-pcm">PDM-&gt;PCM</a></p>
+
+<h2 id="references">References</h2>
+
+<ol>
+<li><a href="http://users.ece.utexas.edu/~bevans/courses/rtdsp/lectures/10_Data_Conversion/AP_Understanding_PDM_Digital_Audio.pdf">Understanding PDM Digital Audio</a></li>
+<li>Discrete-Time Signal Processing, Oppenheim &amp; Schafer</li>
+<li><a href="https://link.springer.com/article/10.1007/BF02441849">Note on the spectral analysis of neural spike trains, P. J. A. LagoN. B. Jones </a></li>
+</ol>
 
       </div>
 
