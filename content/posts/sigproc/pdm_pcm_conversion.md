@@ -1,6 +1,6 @@
 
 +++ 
-date = "2018-10-23"
+date = "2018-10-24"
 title = "PDM-PCM conversion & PDM's connection to neurons"
 +++
 
@@ -12,12 +12,11 @@ For example, if you want the microphone to record an analog audio signal with a 
 
 Here is what a PDM signal looks like:
 
-![PDM](https://upload.wikimedia.org/wikipedia/commons/f/f5/Pulse-density_modulation_2_periods.gif) 
-*The above picture is the PDM bitstream: 0101101111111111111101101010010000000000000100010011011101111111111111011010100100000000000000100101. Blue represents 1 and white represents 0. (Source: wikipedia)* 
+![PDM](https://upload.wikimedia.org/wikipedia/commons/f/f5/Pulse-density_modulation_2_periods.gif) *The above picture is the PDM bitstream: 0101101111111111111101101010010000000000000100010011011101111111111111011010100100000000000000100101. Blue represents 1 and white represents 0. (Source: wikipedia)* 
 
-Let's compare PDM to PCM which might be a more familiar scheme. PCM represents an analog signal by sampling at a rate greater than atleast twice the Nyquist rate and quantizing the amplitude value with N-bits. For example, 24 KHz bandwidth analog signal can be represented by a 48KHz PCM signal with 16-bits per amplitude. PCM is the standard for how uncompressed audio files are stored and manipulated eg. [WAV](https://en.wikipedia.org/wiki/WAV), [Audio CD](https://en.wikipedia.org/wiki/Compact_disc). 
+Let's compare PDM to pulse code modulation (PCM) which might be a more familiar scheme. PCM represents an analog signal by sampling at a rate greater than atleast twice the Nyquist rate and quantizing the amplitude value with N-bits. For example, 24 KHz bandwidth analog signal can be represented by a 48KHz PCM signal with 16-bits per amplitude. PCM is the standard for how uncompressed audio files are stored and manipulated eg. [WAV](https://en.wikipedia.org/wiki/WAV), [Audio CD](https://en.wikipedia.org/wiki/Compact_disc). 
 
-Why the need for PDM then? Microphones implement PDM interfaces because they are low-cost and since PDM is digital, they are less susceptibile to interference noise. 
+Why the need for PDM then? Microphones implement PDM interfaces because they are low-cost and since PDM is digital, they are less susceptibile to interference. 
 
 Intuitively, we see how information is captured in the density-- we are trading off amplitude resolution for time resolution. In this post, we'll see how we can move between PCM and PDM and look at an interesting connection to neurons. 
 
@@ -120,13 +119,19 @@ print("MSE: {} MSE(dB): {}".format(pcm_mse, 10*np.log10(pcm_mse)))
 
 The error is really small -- just ~3e-10. But if were to use fewer bits, the average quantization error would be substantial. And it would be maximum if we were to use just one bit.
 
-Quantization error is best understood when modeled as uniformly distributed uncorrelated additive noise. The uniformly distributed quantization noise is related to the number of bits with the following equation:
+Quantization error is best understood when modeled as uniformly distributed uncorrelated additive noise. This is a mouthful so let's break it down: 
+- error in quantization is $e[n] = x[n] - x_{q}[n]$ where $x_{q}[n]$ is the quantized signal 
+- $e[n]$ has a uniform distribution
+- $e[n_{1}]$ is uncorrelated with $e[n_{2}]$ i.e $E[e[n_{1}] e[n_{2}]] = 0$ where $E[.]$ is the average value of the uniform distribution
+- It is additive in the sense that $x_{q}[n] = x[n] + e[n]$. 
+
+The variance in the quantization noise is related to the number of bits with the following equation:
 
 $\Delta = {\Delta X}/{2^{b}}$
 
 $\sigma_{e}^{2} = {\Delta}^{2}/{12}$
 
-${\Delta X}$ is the dynamic range of the signal x. $b$ is the number of bits used in quantization. $\sigma_{e}^{2}$ is the variance of the error.
+${\Delta X}$ is the difference between the highest and lowest amplitude of the signal x. $b$ is the number of bits used in quantization. $\sigma_{e}^{2}$ is the variance of the error.
 
 
 ```python
@@ -154,7 +159,9 @@ print("Error with {} bit: {} or {} dB".format(b, var_e, 10*np.log10(var_e)))
 
 If we were to use 1 bit as in PDM, we have a much larger total noise of -10.8dB!
 
-So what's the trick? How do we deal with such a large quantization noise for the 1-bit system? Remember that the quantization noise is modeled as a sequence of uniformly distributed random variables that are _uncorrelated_ with each other. This means that the noise PSD is white -- equally present in all the frequencies. If we could shape the noise so that it is concentrated in the unwanted high frequencies, we could reduce the total noise affecting the low frequencies. So what do we need? We need to (a) create a new part of the signal spectrum on the high frequency side and (b) push the quantization noise to the high frequencies. (a) is achieved via oversampling and (b) via noise shaping.   
+So what's the trick? How do we deal with such a large quantization noise for the 1-bit system? Remember that the quantization noise is modeled as a sequence of uniformly distributed random variables that are _uncorrelated_ with each other. This means that the noise power spectral density (PSD) is white -- equally present in all the frequencies. If we could shape the noise so that it is concentrated in the unwanted high frequencies, we could reduce the total noise affecting the low frequencies. 
+
+So what do we need? We need to (a) create a new part of the signal spectrum on the high frequency side and (b) push the quantization noise to the high frequencies. (a) is achieved via oversampling and (b) via noise shaping.   
 
 
 ### Oversampling
@@ -212,10 +219,10 @@ plot_periodogram(quant_noise, fs*L)
 Since our audio signal is limited to only 8KHz (for 16KHz sample rate), we want the quantization noise to have low power in those frequencies. How this is achieved in practice is by adding a feedback loop on the ADC path detailed [here](https://dsp-nbsphinx.readthedocs.io/en/nbsphinx-experiment/quantization/noise_shaping.html). We can use the  system described in the image:
 ![noise shaping](https://dsp-nbsphinx.readthedocs.io/en/nbsphinx-experiment/_images/noise_shaping.png)
 
-This gives:
+Q is the quantizer block. From the diagram,
 $x_Q[k] = \mathcal{Q} \{ x[k] - e[k] * h[k] \} = x[k] + e[k] - e[k] * h[k]$
 
-$h[k] = \delta[k-1]$ which is simply delaying the error signal by one sample.
+We can choose a simple $h[k]$: $h[k] = \delta[k-1]$ which is simply delaying the error signal by one sample.
 
 The final difference equation for a quantizer with first-order noise shaping is:
 $y[n] = x[n] + e[n] - e[n-1]$
@@ -324,11 +331,11 @@ plt.title("PSD of the PCM signal derived from the PDM signal");
 ![png](pdm_pcm_conversion_34_0.png)
 
 
-From the periodogram, the PCM signal looks like it has a lot of harmonic distortion. This can be mitigated by using a better noise shaping modulator.
+From the periodogram, the PCM signal generated through decimation appears to have a lot of harmonic distortion. This can be mitigated by using a better noise shaping modulator.
 
 # Connection to neurons
 
-Neurons produce action potentials in order to pass on information to other neurons. We can record the firing of these action potentials using electrodes. The data collected is often just a list of times at which the impulses/action potentials/spikes occur. By modeling them as point processes (occuring at single points in time), we can think of them as a spike train or a PDM signal! 1 for when there is a spike and 0 for when there isn't. The density encodes the firing rate of the neuron. Once in the PDM format, we can estimate the power spectral density of the spike train for that neuron using FFT for example. 
+Neurons produce action potentials in order to pass on information to other neurons. We can record the firing of these action potentials using electrodes. The data collected is often just a list of times at which the impulses/action potentials/spikes occur. By modeling them as point processes (occuring at single points in time), we can think of them as a spike train or a PDM signal! 1 for when there is a spike and 0 for when there isn't. The density encodes the firing rate of the neuron. Once in the PDM format, we can estimate the power spectral density of the spike train for that neuron (using FFT for example). 
 
 To convert spike times into a PDM signal, we need to find the time resolution of measurement $\Delta T$ and set the sample rate of the PDM to the inverse of $\Delta T$.
 

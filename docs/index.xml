@@ -6,7 +6,7 @@
     <description>Recent content on embedded sigproc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 23 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 24 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://abhipray.com/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>PDM-PCM conversion &amp; PDM&#39;s connection to neurons</title>
       <link>https://abhipray.com/posts/sigproc/pdm_pcm_conversion/</link>
-      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 24 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://abhipray.com/posts/sigproc/pdm_pcm_conversion/</guid>
       <description>Background In the context of digital audio systems, PDM is a common interface between microphones and microcontrollers/signal processors. PDM signals represent analog audio signals by sampling the at a very high rate with a single bit resolution (on/off) for the amplitude. This encodes the analog signal in the density of the pulses and hence the name, Pulse Density Modulation.
