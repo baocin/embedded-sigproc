@@ -17,7 +17,7 @@
       <pubDate>Wed, 24 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://abhipray.com/posts/sigproc/pdm_pcm_conversion/</guid>
-      <description>Background In the context of digital audio systems, PDM is a common interface between microphones and microcontrollers/signal processors. PDM signals represent analog audio signals by sampling the at a very high rate with a single bit resolution (on/off) for the amplitude. This encodes the analog signal in the density of the pulses and hence the name, Pulse Density Modulation.
+      <description>Background In the context of digital audio systems, PDM is a common interface between microphones and microcontrollers/signal processors. PDM signals represent analog audio signals by sampling the analog signal at a very high rate with a single bit resolution (on/off) for the amplitude. This encodes the analog signal in the density of the pulses and hence the name, Pulse Density Modulation.
 For example, if you want the microphone to record an analog audio signal with a bandwidth of 24KHz (FNyquist), you sample it at say 3.</description>
     </item>
     
