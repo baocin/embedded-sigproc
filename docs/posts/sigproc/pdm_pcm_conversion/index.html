@@ -103,49 +103,28 @@ MathJax.Hub.Config({
         </div>
       </header>
       <div>
-        <nav id="TableOfContents">
-<ul>
-<li><a href="#background">Background</a></li>
-<li><a href="#pcm-pdm">PCM -&gt; PDM</a>
-<ul>
-<li><a href="#dealing-with-quantization">Dealing with quantization</a>
-<ul>
-<li><a href="#oversampling">Oversampling</a></li>
-<li><a href="#noise-shaping">Noise shaping</a></li>
-</ul></li>
-<li><a href="#completing-the-picture">Completing the picture</a></li>
-</ul></li>
-<li><a href="#pdm-pcm">PDM -&gt; PCM</a></li>
-<li><a href="#connection-to-neurons">Connection to neurons</a></li>
-<li><a href="#conclusion">Conclusion</a>
-<ul>
-<li><a href="#references">References</a></li>
-</ul></li>
-</ul>
-</nav>
+        
       </div>
       <div>
-        
+        <h1 id="background">Background</h1>
 
-<h1 id="background">Background</h1>
-
-<p>In the context of digital audio systems, PDM is a common interface between microphones and microcontrollers/signal processors. PDM signals represent analog audio signals by sampling the  analog signal at a very high rate with a single bit resolution (on/off) for the amplitude. This encodes the analog signal in the density of the pulses and hence the name, Pulse Density Modulation.</p>
+<p>In the context of digital audio systems, PDM is a common interface between microphones and microcontrollers/signal processors. PDM signals represent analog audio signals by sampling the  analog microphone waveform at a very high rate with a single bit resolution (on/off) for the amplitude. This encodes the analog signal in the density of the pulses and hence the name, Pulse Density Modulation.</p>
 
 <p>For example, if you want the microphone to record an analog audio signal with a bandwidth of 24KHz (F<sub>Nyquist</sub>), you sample it at say 3.072MHz (F<sub>Nyquist</sub> * 128) with a 1-bit resolution.</p>
 
 <p>Here is what a PDM signal looks like:</p>
 
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Pulse-density_modulation_2_periods.gif" alt="PDM" /> <em>The above picture is the PDM bitstream: 0101101111111111111101101010010000000000000100010011011101111111111111011010100100000000000000100101. Blue represents 1 and white represents 0. (Source: wikipedia)</em></p>
+<p><figure><img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Pulse-density_modulation_2_periods.gif" alt="PDM" title="The above picture represents the PDM bitstream for a sine wave: 0101101111111111111101101010010000000000000100010011011101111111111111011010100100000000000000100101. Blue represents 1 and white represents 0. (Source: Wikipedia)"><figcaption>The above picture represents the PDM bitstream for a sine wave: 0101101111111111111101101010010000000000000100010011011101111111111111011010100100000000000000100101. Blue represents 1 and white represents 0. (Source: Wikipedia)</figcaption></figure></p>
 
-<p>Let&rsquo;s compare PDM to pulse code modulation (PCM) which might be a more familiar scheme. PCM represents an analog signal by sampling at a rate greater than atleast twice the Nyquist rate and quantizing the amplitude value with N-bits. For example, 24 KHz bandwidth analog signal can be represented by a 48KHz PCM signal with 16-bits per amplitude. PCM is the standard for how uncompressed audio files are stored and manipulated eg. <a href="https://en.wikipedia.org/wiki/WAV">WAV</a>, <a href="https://en.wikipedia.org/wiki/Compact_disc">Audio CD</a>.</p>
+<p>Let's compare PDM to pulse code modulation (PCM) which might be a more familiar scheme. PCM represents an analog signal by sampling at a rate greater than atleast twice the Nyquist rate and quantizing the amplitude value with N-bits. For example, 24 KHz bandwidth analog signal can be represented by a 48KHz PCM signal with 16-bits per amplitude. PCM is the standard for how uncompressed audio files are stored and manipulated eg. <a href="https://en.wikipedia.org/wiki/WAV">WAV</a>, <a href="https://en.wikipedia.org/wiki/Compact_disc">Audio CD</a>.</p>
 
 <p>Why the need for PDM then? Microphones implement PDM interfaces because they are low-cost and since PDM is digital, they are less susceptibile to interference.</p>
 
-<p>Intuitively, we see how information is captured in the density&ndash; we are trading off amplitude resolution for time resolution. In this post, we&rsquo;ll see how we can move between PCM and PDM and look at an interesting connection to neurons.</p>
+<p>Intuitively, we see how information is captured in the density-- we are trading off amplitude resolution for time resolution. In this post, we'll see how we can move between PCM and PDM and look at an interesting connection to neurons.</p>
 
-<h1 id="pcm-pdm">PCM -&gt; PDM</h1>
+<h1 id="pcm--pdm">PCM -&gt; PDM</h1>
 
-<p>Since PCM is a more intuitive representation, let&rsquo;s first look at how we can transform a PCM signal into a PDM signal.</p>
+<p>Since PCM is a more intuitive representation, let's first look at how we can transform a PCM signal into a PDM signal.</p>
 
 <p>Our PCM signal is a 16KHz sine wav with 16-bit depth:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#fff;font-weight:bold">import</span> numpy <span style="color:#fff;font-weight:bold">as</span> np
@@ -185,16 +164,16 @@ plot_idx = <span style="color:#fff;font-weight:bold">int</span>(plot_dur*fs)
 plt.plot(t[<span style="color:#ff0;font-weight:bold">0</span>:plot_idx], x_pcm[<span style="color:#ff0;font-weight:bold">0</span>:plot_idx]);
 plt.title(<span style="color:#0ff;font-weight:bold">&#34;1 KHz PCM signal&#34;</span>); plt.xlabel(<span style="color:#0ff;font-weight:bold">&#39;time(s)&#39;</span>); 
 plt.ylabel(<span style="color:#0ff;font-weight:bold">&#39;Amplitude (16-bit)&#39;</span>);</code></pre></div>
-<p><img src="pdm_pcm_conversion_6_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_6_0.png" alt="png"></figure></p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#fff;font-weight:bold">print</span>(<span style="color:#0ff;font-weight:bold">&#34;x_pcm is in range [{}, {}]&#34;</span>.format(<span style="color:#fff;font-weight:bold">min</span>(x_pcm), <span style="color:#fff;font-weight:bold">max</span>(x_pcm)))</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">x_pcm is in range [-32768.0, 32767.0]</pre></div>
-<p>The amplitude values of the PCM signal are integers in the range [-32768, 32767]. What would happen if we restricted the range to the set {0, 1} as in PDM? Lots of noise and distortion as seen in the plot below. Our sine wave becomes a square wave.</p>
+<p>The amplitude values of the PCM signal are integers in the range . What would happen if we restricted the range to the set {0, 1} as in PDM? Lots of noise and distortion as seen in the plot below. Our sine wave becomes a square wave.</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x_pdm, _ = quantize(x_discrete, <span style="color:#ff0;font-weight:bold">1</span>, (-<span style="color:#ff0;font-weight:bold">1</span>, <span style="color:#ff0;font-weight:bold">1</span>))
 x_pdm += <span style="color:#ff0;font-weight:bold">1</span>
 plt.plot(t[<span style="color:#ff0;font-weight:bold">0</span>:plot_idx], x_pdm[<span style="color:#ff0;font-weight:bold">0</span>:plot_idx]);
 plt.title(<span style="color:#0ff;font-weight:bold">&#34;PCM signal with 1-bit&#34;</span>); plt.xlabel(<span style="color:#0ff;font-weight:bold">&#39;time(s)&#39;</span>); 
 plt.ylabel(<span style="color:#0ff;font-weight:bold">&#39;Amplitude (1-bit)&#39;</span>);
 <span style="color:#fff;font-weight:bold">print</span>(<span style="color:#0ff;font-weight:bold">&#34;x_pdm is in set {}&#34;</span>.format(<span style="color:#fff;font-weight:bold">set</span>(x_pdm)))</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">x_pdm is in set {0.0, 1.0}</pre></div>
-<p><img src="pdm_pcm_conversion_9_1.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_9_1.png" alt="png"></figure></p>
 
 <h2 id="dealing-with-quantization">Dealing with quantization</h2>
 
@@ -202,13 +181,16 @@ plt.ylabel(<span style="color:#0ff;font-weight:bold">&#39;Amplitude (1-bit)&#39;
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pcm_err = x_discrete - (x_pcm.astype(np.<span style="color:#fff;font-weight:bold">float</span>)/<span style="color:#ff0;font-weight:bold">2</span>**(b-<span style="color:#ff0;font-weight:bold">1</span>)) <span style="color:#007f7f"># Rough estimate</span>
 pcm_mse = <span style="color:#fff;font-weight:bold">sum</span>(pcm_err**<span style="color:#ff0;font-weight:bold">2</span>)/pcm_err.size
 <span style="color:#fff;font-weight:bold">print</span>(<span style="color:#0ff;font-weight:bold">&#34;MSE: {} MSE(dB): {}&#34;</span>.format(pcm_mse, <span style="color:#ff0;font-weight:bold">10</span>*np.log10(pcm_mse)))</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">MSE: 3.157667038967621e-10 MSE(dB): -95.00633666209498</pre></div>
-<p>The error is really small &ndash; just ~3e-10. But if were to use fewer bits, the average quantization error would be substantial. And it would be maximum if we were to use just one bit.</p>
+<p>The error is really small -- just ~3e-10. But if were to use fewer bits, the average quantization error would be substantial. And it would be maximum if we were to use just one bit.</p>
 
-<p>Quantization error is best understood when modeled as uniformly distributed uncorrelated additive noise. This is a mouthful so let&rsquo;s break it down:
-- error in quantization is $e[n] = x[n] - x<em>{q}[n]$ where $x</em>{q}[n]$ is the quantized signal
-- $e[n]$ has a uniform distribution
-- $e[n<em>{1}]$ is uncorrelated with $e[n</em>{2}]$ i.e $E[e[n<em>{1}] e[n</em>{2}]] = 0$ where $E[.]$ is the average value of the uniform distribution
-- It is additive in the sense that $x_{q}[n] = x[n] + e[n]$.</p>
+<p>Quantization error is best understood when modeled as uniformly distributed uncorrelated additive noise. This is a mouthful so let's break it down:</p>
+
+<ul>
+<li>error in quantization is $e[n] = x[n] - x_{q}[n]$ where $x_{q}[n]$ is the quantized signal</li>
+<li>$e[n]$ has a uniform distribution</li>
+<li>$e[n_{1}]$ is uncorrelated with $e[n_{2}]$ i.e $E[e[n_{1}] e[n_{2}]] = 0$ where $E[.]$ is the average value of the uniform distribution</li>
+<li>It is additive in the sense that $x_{q}[n] = x[n] + e[n]$.</li>
+</ul>
 
 <p>The variance in the quantization noise is related to the number of bits with the following equation:</p>
 
@@ -228,13 +210,13 @@ var_e = ((delta_x/<span style="color:#ff0;font-weight:bold">2</span>**b)**<span 
 <span style="color:#fff;font-weight:bold">print</span>(<span style="color:#0ff;font-weight:bold">&#34;Error with {} bit: {} or {} dB&#34;</span>.format(b, var_e, <span style="color:#ff0;font-weight:bold">10</span>*np.log10(var_e)))</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">Error with 1 bit: 0.08333333333333333 or -10.79181246047625 dB</pre></div>
 <p>If we were to use 1 bit as in PDM, we have a much larger total noise of -10.8dB!</p>
 
-<p>So what&rsquo;s the trick? How do we deal with such a large quantization noise for the 1-bit system? Remember that the quantization noise is modeled as a sequence of uniformly distributed random variables that are <em>uncorrelated</em> with each other. This means that the noise power spectral density (PSD) is white &ndash; equally present in all the frequencies. If we could shape the noise so that it is concentrated in the unwanted high frequencies, we could reduce the total noise affecting the low frequencies.</p>
+<p>So what's the trick? How do we deal with such a large quantization noise for the 1-bit system? Remember that the quantization noise is modeled as a sequence of uniformly distributed random variables that are <em>uncorrelated</em> with each other. This means that the noise power spectral density (PSD) is white -- equally present in all the frequencies. If we could shape the noise so that it is concentrated in the unwanted high frequencies, we could reduce the total noise affecting the low frequencies.</p>
 
 <p>So what do we need? We need to (a) create a new part of the signal spectrum on the high frequency side and (b) push the quantization noise to the high frequencies. (a) is achieved via oversampling and (b) via noise shaping.</p>
 
 <h3 id="oversampling">Oversampling</h3>
 
-<p>We can oversample an analog signal simply by using a higher ADC sample rate. For a PCM signal, we use interpolation. Let&rsquo;s see how interpolating by a factor of 4 affects the 1KHz PCM signal in the frequency domain:</p>
+<p>We can oversample an analog signal simply by using a higher ADC sample rate. For a PCM signal, we use interpolation. Let's see how interpolating by a factor of 4 affects the 1KHz PCM signal in the frequency domain:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#fff;font-weight:bold">def</span> plot_periodogram(sig, fs):
     f, Pxx_den = signal.periodogram(sig, fs)
     plt.plot(f, Pxx_den)
@@ -253,9 +235,9 @@ h = signal.firwin(<span style="color:#ff0;font-weight:bold">80</span>, np.pi/L, 
 x_pcm_interp = np.<span style="color:#fff;font-weight:bold">round</span>((L * signal.upfirdn(h, x_pcm, up=L)))
 plot_periodogram(x_pcm_interp, fs*L);
 plt.title(<span style="color:#0ff;font-weight:bold">&#39;PSD of the interpolated sine wave&#39;</span>);</code></pre></div>
-<p><img src="pdm_pcm_conversion_18_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_18_0.png" alt="png"></figure></p>
 
-<p><img src="pdm_pcm_conversion_18_1.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_18_1.png" alt="png"></figure></p>
 
 <p>As you can see, the oversampled sine wave spectrum now has lots of empty space in the high frequencies.</p>
 
@@ -266,10 +248,10 @@ plt.title(<span style="color:#0ff;font-weight:bold">&#39;PSD of the interpolated
 <p>The PSD of the quantization noise is flat for the oversampled signal:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">quant_noise = np.random.uniform(low=-delta/<span style="color:#ff0;font-weight:bold">2</span>, high=delta/<span style="color:#ff0;font-weight:bold">2</span>, size=x_pcm_interp.size)
 plot_periodogram(quant_noise, fs*L)</code></pre></div>
-<p><img src="pdm_pcm_conversion_21_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_21_0.png" alt="png"></figure></p>
 
 <p>Since our audio signal is limited to only 8KHz (for 16KHz sample rate), we want the quantization noise to have low power in those frequencies. How this is achieved in practice is by adding a feedback loop on the ADC path detailed <a href="https://dsp-nbsphinx.readthedocs.io/en/nbsphinx-experiment/quantization/noise_shaping.html">here</a>. We can use the  system described in the image:
-<img src="https://dsp-nbsphinx.readthedocs.io/en/nbsphinx-experiment/_images/noise_shaping.png" alt="noise shaping" /></p>
+<figure><img src="https://dsp-nbsphinx.readthedocs.io/en/nbsphinx-experiment/_images/noise_shaping.png" alt="noise shaping"></figure></p>
 
 <p>Q is the quantizer block. From the diagram,
 $x_Q[k] = \mathcal{Q} { x[k] - e[k] * h[k] } = x[k] + e[k] - e[k] * h[k]$</p>
@@ -283,13 +265,13 @@ $y[n] = x[n] + e[n] - e[n-1]$</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">b = np.array([<span style="color:#ff0;font-weight:bold">1</span>, -<span style="color:#ff0;font-weight:bold">1</span>]) <span style="color:#007f7f"># Filter coefficients of 1 - z^-1</span>
 quant_noise_shaped = signal.lfilter(b, np.array([<span style="color:#ff0;font-weight:bold">1</span>]), quant_noise);
 plot_periodogram(quant_noise_shaped, fs*L)</code></pre></div>
-<p><img src="pdm_pcm_conversion_23_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_23_0.png" alt="png"></figure></p>
 
 <p>The low frequencies look relatively clean!</p>
 
 <h2 id="completing-the-picture">Completing the picture</h2>
 
-<p>We have oversampled the signal and shaped the quantization noise. Let&rsquo;s put them together:</p>
+<p>We have oversampled the signal and shaped the quantization noise. Let's put them together:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#fff;font-weight:bold">def</span> pcm_to_pdm(pcm, oversample_rate):
     <span style="color:#007f7f"># Oversample</span>
     L = oversample_rate
@@ -310,11 +292,11 @@ plot_periodogram(quant_noise_shaped, fs*L)</code></pre></div>
     <span style="color:#fff;font-weight:bold">return</span> x_pdm</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">oversample_rate = <span style="color:#ff0;font-weight:bold">64</span>
 x_pdm = pcm_to_pdm(x_pcm, oversample_rate)
 plt.plot(x_pdm[<span style="color:#ff0;font-weight:bold">0</span>:<span style="color:#ff0;font-weight:bold">4000</span>]);</code></pre></div>
-<p><img src="pdm_pcm_conversion_27_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_27_0.png" alt="png"></figure></p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plot_periodogram(x_pdm, fs*oversample_rate)</code></pre></div>
-<p><img src="pdm_pcm_conversion_28_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_28_0.png" alt="png"></figure></p>
 
-<h1 id="pdm-pcm">PDM -&gt; PCM</h1>
+<h1 id="pdm--pcm">PDM -&gt; PCM</h1>
 
 <p>To convert PDM back to PCM, we need to (i) apply a low-pass filter with a cut-off at the base-band audio frequency (ii) reduce the sample rate back to the original (iii) change the number of bits per amplitude from 1-bit to the desired bit depth.</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#fff;font-weight:bold">def</span> pdm_to_pcm(pdm, oversample_rate, b):
@@ -325,22 +307,22 @@ plt.plot(x_pdm[<span style="color:#ff0;font-weight:bold">0</span>:<span style="c
     <span style="color:#fff;font-weight:bold">return</span> pcm</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">reconstructed_pcm = pdm_to_pcm(x_pdm, oversample_rate, <span style="color:#ff0;font-weight:bold">16</span>)</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt.plot(reconstructed_pcm);
 plt.title(<span style="color:#0ff;font-weight:bold">&#34;PCM signal converted from PDM&#34;</span>);
 plt.xlabel(<span style="color:#0ff;font-weight:bold">&#39;Samples&#39;</span>); plt.ylabel(<span style="color:#0ff;font-weight:bold">&#39;Amplitude (16-bit)&#39;</span>);</code></pre></div>
-<p><img src="pdm_pcm_conversion_32_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_32_0.png" alt="png"></figure></p>
 
 <p>The first many samples in the PCM signal represent transients that could be attributed to the decimation/low-pass filter delays.</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plot_periodogram(reconstructed_pcm, fs);
 plt.title(<span style="color:#0ff;font-weight:bold">&#34;PSD of the PCM signal derived from the PDM signal&#34;</span>);</code></pre></div>
-<p><img src="pdm_pcm_conversion_34_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_34_0.png" alt="png"></figure></p>
 
 <p>From the periodogram, the PCM signal generated through decimation appears to have a lot of harmonic distortion. This can be mitigated by using a better noise shaping modulator.</p>
 
 <h1 id="connection-to-neurons">Connection to neurons</h1>
 
-<p>Neurons produce action potentials in order to pass on information to other neurons. We can record the firing of these action potentials using electrodes. The data collected is often just a list of times at which the impulses/action potentials/spikes occur. By modeling them as point processes (occuring at single points in time), we can think of them as a spike train or a PDM signal! 1 for when there is a spike and 0 for when there isn&rsquo;t. The density encodes the firing rate of the neuron. Once in the PDM format, we can estimate the power spectral density of the spike train for that neuron (using FFT for example).</p>
+<p>Neurons produce action potentials in order to pass on information to other neurons. We can record the firing of these action potentials using electrodes. The data collected is often just a list of times at which the impulses/action potentials/spikes occur. By modeling them as point processes (occuring at single points in time), we can think of them as a spike train or a PDM signal! 1 for when there is a spike and 0 for when there isn't. The density encodes the firing rate of the neuron. Once in the PDM format, we can estimate the power spectral density of the spike train for that neuron (using FFT for example).</p>
 
 <p>To convert spike times into a PDM signal, we need to find the time resolution of measurement $\Delta T$ and set the sample rate of the PDM to the inverse of $\Delta T$.</p>
 
-<p>Let&rsquo;s try it on some real data. The data is from the <a href="http://kordinglab.com/spykes/auto_examples/plot_reaching_dataset_example.html#sphx-glr-auto-examples-plot-reaching-dataset-example-py">spykes library</a>.</p>
+<p>Let's try it on some real data. The data is from the <a href="http://kordinglab.com/spykes/auto_examples/plot_reaching_dataset_example.html#sphx-glr-auto-examples-plot-reaching-dataset-example-py">spykes library</a>.</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">reach_data = load_reaching_data()</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">neuron_number = <span style="color:#ff0;font-weight:bold">91</span>
 spike_times = reach_data[<span style="color:#0ff;font-weight:bold">&#39;neurons_PMd&#39;</span>][neuron_number - <span style="color:#ff0;font-weight:bold">1</span>][<span style="color:#ff0;font-weight:bold">0</span>:<span style="color:#ff0;font-weight:bold">1000</span>]
 neuron_PMd = NeuroVis(spike_times, name=<span style="color:#0ff;font-weight:bold">&#39;PMd </span><span style="color:#0ff;font-weight:bold">%d</span><span style="color:#0ff;font-weight:bold">&#39;</span> % neuron_number)</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#007f7f"># Find delta_t</span>
@@ -363,16 +345,16 @@ pdm_t = np.arange(<span style="color:#ff0;font-weight:bold">0</span>, <span styl
     pdm_neuron.append(-<span style="color:#ff0;font-weight:bold">1</span>)
 pdm_neuron = np.array(pdm_neuron)</code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt.plot(pdm_t[<span style="color:#ff0;font-weight:bold">0</span>:<span style="color:#ff0;font-weight:bold">3000</span>], pdm_neuron[<span style="color:#ff0;font-weight:bold">0</span>:<span style="color:#ff0;font-weight:bold">3000</span>]);
 plt.title(<span style="color:#0ff;font-weight:bold">&#34;Neuron Spike Train as PDM signal&#34;</span>); plt.xlabel(<span style="color:#0ff;font-weight:bold">&#39;Time(s)&#39;</span>);</code></pre></div>
-<p><img src="pdm_pcm_conversion_40_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_40_0.png" alt="png"></figure></p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt.figure()
 plot_periodogram(pdm_neuron, fs_neuron);
 plt.title(<span style="color:#0ff;font-weight:bold">&#34;PSD of neuron spike train&#34;</span>);</code></pre></div>
-<p><img src="pdm_pcm_conversion_41_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_41_0.png" alt="png"></figure></p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#007f7f"># PSD energy is concentrated in the low frequencies so zoom in or alternatively, decimate </span>
 plot_periodogram(pdm_neuron, fs_neuron);
 plt.title(<span style="color:#0ff;font-weight:bold">&#34;PSD of neuron spike train&#34;</span>);
 plt.xlim(<span style="color:#ff0;font-weight:bold">0</span>, <span style="color:#ff0;font-weight:bold">10</span>);</code></pre></div>
-<p><img src="pdm_pcm_conversion_42_0.png" alt="png" /></p>
+<p><figure><img src="pdm_pcm_conversion_42_0.png" alt="png"></figure></p>
 
 <h1 id="conclusion">Conclusion</h1>
 
