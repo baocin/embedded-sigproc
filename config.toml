@@ -5,7 +5,7 @@ title = "embedded sigproc"
 
 paginate = 20
 relativeURLs = true
-
+markup = "mmark"
 pygmentsstyle = "b2"
 pygmentscodefences = true
 pygmentscodefencesguesssyntax = true

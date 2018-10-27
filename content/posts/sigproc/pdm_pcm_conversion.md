@@ -2,17 +2,18 @@
 +++ 
 date = "2018-10-24"
 title = "PDM-PCM conversion & PDM's connection to neurons"
+markup = "mmark"
 +++
 
 # Background
 
-In the context of digital audio systems, PDM is a common interface between microphones and microcontrollers/signal processors. PDM signals represent analog audio signals by sampling the  analog signal at a very high rate with a single bit resolution (on/off) for the amplitude. This encodes the analog signal in the density of the pulses and hence the name, Pulse Density Modulation.
+In the context of digital audio systems, PDM is a common interface between microphones and microcontrollers/signal processors. PDM signals represent analog audio signals by sampling the  analog microphone waveform at a very high rate with a single bit resolution (on/off) for the amplitude. This encodes the analog signal in the density of the pulses and hence the name, Pulse Density Modulation.
 
 For example, if you want the microphone to record an analog audio signal with a bandwidth of 24KHz (F<sub>Nyquist</sub>), you sample it at say 3.072MHz (F<sub>Nyquist</sub> * 128) with a 1-bit resolution. 
 
 Here is what a PDM signal looks like:
 
-![PDM](https://upload.wikimedia.org/wikipedia/commons/f/f5/Pulse-density_modulation_2_periods.gif) *The above picture is the PDM bitstream: 0101101111111111111101101010010000000000000100010011011101111111111111011010100100000000000000100101. Blue represents 1 and white represents 0. (Source: wikipedia)* 
+![PDM](https://upload.wikimedia.org/wikipedia/commons/f/f5/Pulse-density_modulation_2_periods.gif "The above picture represents the PDM bitstream for a sine wave: 0101101111111111111101101010010000000000000100010011011101111111111111011010100100000000000000100101. Blue represents 1 and white represents 0. \(Source: Wikipedia\)") 
 
 Let's compare PDM to pulse code modulation (PCM) which might be a more familiar scheme. PCM represents an analog signal by sampling at a rate greater than atleast twice the Nyquist rate and quantizing the amplitude value with N-bits. For example, 24 KHz bandwidth analog signal can be represented by a 48KHz PCM signal with 16-bits per amplitude. PCM is the standard for how uncompressed audio files are stored and manipulated eg. [WAV](https://en.wikipedia.org/wiki/WAV), [Audio CD](https://en.wikipedia.org/wiki/Compact_disc). 
 
@@ -120,6 +121,7 @@ print("MSE: {} MSE(dB): {}".format(pcm_mse, 10*np.log10(pcm_mse)))
 The error is really small -- just ~3e-10. But if were to use fewer bits, the average quantization error would be substantial. And it would be maximum if we were to use just one bit.
 
 Quantization error is best understood when modeled as uniformly distributed uncorrelated additive noise. This is a mouthful so let's break it down: 
+
 - error in quantization is $e[n] = x[n] - x_{q}[n]$ where $x_{q}[n]$ is the quantized signal 
 - $e[n]$ has a uniform distribution
 - $e[n_{1}]$ is uncorrelated with $e[n_{2}]$ i.e $E[e[n_{1}] e[n_{2}]] = 0$ where $E[.]$ is the average value of the uniform distribution
