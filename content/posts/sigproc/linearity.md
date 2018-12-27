@@ -157,14 +157,14 @@ $\langle f, g \rangle = \int_{a}^{b} f^{*}(x)g(x)dx$. In words, the inner produc
 
 - The Fourier transform is thus the inner product between two functions -- the input function and the complex exponential evaluated at a particular frequency value. $$\hat{f}(\omega) = \langle e^{i \omega t}, f \rangle = \int_{-\infty}^{\infty} f(t)e^{-i \omega t}dt$$. 
 
-- To summarize, the Fourier transform is a *linear* operator. Specifically it is an inner product linear operator. Inner products changes the basis of our function/signal $$f(t)$$ into the basis of the complex exponential functions $$e^{i \omega t}$$. It tells you for a particular given frequency $$\omega$$, how similar is the input function to a complex exponential of frequency $$\omega$$.
+- To summarize, the Fourier transform is a *linear* operator. Specifically it is an inner product linear operator. It changes the basis of our function/signal $$f(t)$$ into the basis of the complex exponential functions $$e^{i \omega t}$$. It tells you for a particular given frequency $$\omega$$, how similar is the input function to a complex exponential of frequency $$\omega$$.
 
 ### Conclusion
 
-We started off by immediately replacing the straight line picture of linearity into that of hyperplanes as we add dimensions. With the system of equations $$y = Ax$$, we saw concrete examples of what vectors are (list of numbers or points in space) and what a linear function as a matrix $$A$$ is (coefficients of linear equations relating input and output vector). 
+We started off by immediately replacing the straight line picture of linearity into that of hyperplanes. With the system of equations $$y = Ax$$, we saw concrete examples of what vectors are (list of numbers or points in space) and what a linear function as a matrix $$A$$ is (coefficients of linear equations relating input and output vectors). 
 
 We then defined a linear operator (concrete case of the matrix $$A$$) using the idea of linear superposition. This definition of linearity is perhaps the biggest takeaway.
 
-The big jump in abstraction comes with the definition of vector spaces and how vectors can be more than just lists of numbers. Specifically, we saw how functions can be n-dimensional vectors coming from some vector space of functions. A vector space can be described by a set of basis vectors the number of which define the dimensionality of the vector space. The definition of linearity still holds for abstract vector spaces, only the intuitions might be different.
+The big jump in abstraction comes with the definition of vector spaces and how vectors can be more than just lists of numbers. Specifically, we saw how functions can be n-dimensional vectors coming from some vector space of functions. A vector space can be described by a set of basis vectors the number of which define the dimensionality of the vector space. 
 
-Last, we  and applied it to gain a new perspective of the popular Fourier transform; as an inner product between the input function and a complex exponential.
+Last, we applied our generalization of vector spaces to gain a new perspective of the popular Fourier transform; as an inner product between the input function and a complex exponential.

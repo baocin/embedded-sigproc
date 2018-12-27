@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Abhipray Sahoo">
+    <meta name="description" content="Journal">
+    <meta name="keywords" content="audio, embedded systems, signal processing">
+
+    
+    <title>
+  What even is linear? · embedded sigproc
+</title>
+
+    <link rel="canonical" href="https://abhipray.com/posts/sigproc/linearity/">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Merriweather:300,700|Source+Code+Pro:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" integrity="sha256-oSrCnRYXvHG31SBifqP2PM1uje7SJUyX0nTwO2RJV54=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="../../../css/coder.min.da5204b40ef8cbcb52b75a8cac5656a9cebc00a15e25c865a4b84a3c06b3ed82.css" integrity="sha256-2lIEtA74y8tSt1qMrFZWqc68AKFeJchlpLhKPAaz7YI=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      <link rel="stylesheet" href="https://abhipray.com/css/custom.css">
+    
+
+    <link rel="icon" type="image/png" href="https://abhipray.com/img/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://abhipray.com/img/favicon-16x16.png" sizes="16x16">
+
+    
+
+    <meta name="generator" content="Hugo 0.49.2" />
+
+    <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    displayAlign: "center",
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+  </head>
+
+  <body class="">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://abhipray.com/">
+      embedded sigproc
+    </a>
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="../../../posts/">Posts</a>
+          </li>
+        
+      
+      
+    </ul>
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">What even is linear?</h1>
+        </div>
+        <div class="post-meta">
+          <span class="posted-on">
+            <i class="far fa-calendar"></i>
+            <time datetime='2018-12-27T00:00:00Z'>
+              December 27, 2018
+            </time>
+          </span>
+          <span class="reading-time">
+            <i class="far fa-clock"></i>
+            12 minutes read
+          </span>
+        </div>
+      </header>
+      <div>
+        
+      </div>
+      <div>
+        <p>The list of engineering ideas centered on linearity is endless: linear regression, linear time-invariant (LTI) filter, linear dynamical system, non-linear neural networks etc. Most of these ideas are introduced with a cursorsy view of the significance of linearity. In this post, I want to flip the perspective and make linearity the central theme and elucidate how other ideas depend on it.</p>
+
+<p>We probably all think straight line when we think of the word linear. In fact, my first strong association of the word is from physics: the recti<em>linear</em> propagation of light i.e light travels in a straight line. But what do straight lines have to do with all those listed ideas? Can we define linearity in a context independent manner? We’ll start with elementary math and build up a definition that can be applied whenever we encounter the word linear. Ultimately, we'll use the new perspective of linearity in understanding Fourier transforms. My goal in doing this exercise was to replace the straight line mental picture with some other picture that makes more sense and is more useful.</p>
+
+<h1 id="concrete-meaning-of-linear">Concrete meaning of linear</h1>
+
+<h2 id="linear-equations-from-straight-lines-to-hyperplanes">Linear equations: From straight lines to hyperplanes</h2>
+
+<p>An equation relates variables with equality and takes the following form for $n$ variables:</p>
+
+<p>${\displaystyle a_{1}x_{1}+\cdots +a_{n}x_{n}+b=0}$</p>
+
+<ul>
+<li><p>The highest <a href="https://en.wikipedia.org/wiki/Degree_of_a_polynomial">degree</a> in this equation is 1.</p></li>
+
+<li><p>Solving this equation refers to finding values for the variables that make the equation hold true. There can be more than one solution. The solution set contains all the solutions to the equation. When n = 2, the solution set is infintely large and contains pairs of values that live on a straight line. To see this geometrically, we can plot the pairs of variables in a two dimensional graph. Each axis represents a variable.</p></li>
+</ul>
+
+<p><figure><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Linear_Function_Graph.svg/800px-Linear_Function_Graph.svg.png" alt="linear_equation"></figure></p>
+
+<ul>
+<li>The generalization of the solution set for $n &gt; 2$ is a hyperplane (line in 2D plane, <a href="https://www.wolframalpha.com/input/?i=x%2By%2Bz+%3D+0">a plane in 3D</a>, a cube in 4D etc.). Thus linear does not always imply straight lines.</li>
+</ul>
+
+<h3 id="linear-function--defining-functions-using-equations">Linear function : Defining functions using equations</h3>
+
+<p>A function is an association of an element <span  class="math">\(x\)</span> in one set <span  class="math">\(X\)</span> to another element in set <span  class="math">\(Y\)</span>. It is most commonly specified as an equation:</p>
+
+<p>$y = f(x)$</p>
+
+<p>$f(x)$ is a linear function if the above equation is linear:</p>
+
+<p>${a_{1}f(x) + a_{2}x + b = 0}$</p>
+
+<p>or ${f(x) = (-a_{2}/a_{1})x-b}$</p>
+
+<p>All we have done so far is called one of the variables in a linear equation with $n=2$ as the output of a function. We often refer to the output of a function as the dependent variable and the input $x$ as the independent variable.</p>
+
+<p>We can also generalize a linear function as having n independent variables:</p>
+
+<p>${Y = f(x_{1}, x_{2}...x_{n}) = a_{1}x_{1} + \cdots +a_{n}x_{n} + b}$</p>
+
+<p>This gets a little messy so we stack up $x_1...x_n$ into a list of numbers and call the new list object a vector. The vector is said to be <span  class="math">\(n\)</span> dimensional.</p>
+
+<h2 id="system-of-equations---dealing-with-many-variables">System of equations :  Dealing with many variables</h2>
+
+<p>Algebra provides methods to solve equations and linear algebra to solve linear equations like the one in above. It enables the solving of multiple equations at once i.e a system of equations:</p>
+
+<p>${y_{1} = a_{11}x_{1} + \cdots +a_{1n}x_{n} + b_1}$</p>
+
+<p>${y_{2} = a_{21}x_{1} + \cdots +a_{2n}x_{n} + b_2}$</p>
+
+<p>${y_{3} = a_{31}x_{1} + \cdots +a_{3n}x_{n} + b_3}$</p>
+
+<p>$\vdots$</p>
+
+<p>$y_{n} = a_{n1}x_{1} + \cdots +a_{nn}x_{n} + b$</p>
+
+<p>We stack up the $y_{i}$s into a list and call it the $y$ vector. And replace the coefficients with a matrix $A$:</p>
+
+<p><span  class="math">\[\begin{bmatrix} a_{11} & \cdots & a_{1n} \\ \vdots & \ddots & \vdots \\ a_{n1} & \cdots & a_{nn} \end{bmatrix}\]</span></p>
+
+<p>A system of equations is thus <span  class="math">\(y = Ax + b\)</span>.</p>
+
+<p>This is how linear algebra was first introduced to me. The topic goes into great depth into the properties of the matrix $A$ which captures all the information regarding a linear function. Solving the system refers to finding all the values in the vector <span  class="math">\(x\)</span> that satisfy the equation.</p>
+
+<p>The system of equations picture is barely revelatory. It is one specific example of a more general idea for linearity.</p>
+
+<h1 id="definition-of-linearity">Definition of linearity</h1>
+
+<h2 id="linear-maptranformationoperation--reinterpreting-y--ax">Linear map/tranformation/operation : Reinterpreting <span  class="math">\(y = Ax\)</span></h2>
+
+<p>An operation/transformation/map <span  class="math">\(\mathbb{L}(x)\)</span> takes in an input vector <span  class="math">\(x\)</span> and outputs/transforms/maps to a vector <span  class="math">\(y\)</span>.</p>
+
+<p>Now's the time for the definition of linearity we've been building up to. A map/transformation/operation is linear if the superposition property holds:</p>
+
+<p>$\mathbb{F}(\alpha x_1 + \beta x_2) = \alpha \mathbb{F}(x_1) + \beta \mathbb{F}(x_2)$</p>
+
+<p>The equation tells us that if we take two vectors <span  class="math">\(x_1\)</span> and <span  class="math">\(x_2\)</span>, scale them with <span  class="math">\(\alpha\)</span> and <span  class="math">\(\beta\)</span> and pass the result through the linear operator then the output is the same as if we had passed each output separately, scaled them and then added the two results to produce the output. This is a strong constraint; it means that the operator acts on each input independently.</p>
+
+<p>In the system of equations picture of <span  class="math">\(y = Ax\)</span>, matrix A is a linear operator because it satisfies this superposition property. In fact, every linear function/transformation can be written as a matrix.</p>
+
+<p>Before we start applying this definition of linearity we need to paint a better picture for what a vector is.</p>
+
+<h1 id="generalizing-vectors">Generalizing vectors</h1>
+
+<h2 id="abstract-vector-space">Abstract vector space</h2>
+
+<p>We just saw how the system of equations picture gives us a notion for what a vector is: a list of numbers. Geometrically, we can think of the list as points in a &quot;space&quot;. If the numbers are real numbers and the list has <span  class="math">\(n\)</span> elements, the vector belongs to a vector space of n-dimensional real-valued points ${\Re^{n}}$.</p>
+
+<p>Now the interesting bit is that a list of numbers is only one example for what a vector can be. You can define other objects as vectors belonging to some vector &quot;space&quot;. We will see examples in a second but before that, here is the general definition of what a vector space is.</p>
+
+<p>A vector space consists of four objects:</p>
+
+<ul>
+<li>A set <span  class="math">\(V\)</span></li>
+<li>A definition for a sum operation <span  class="math">\(+\)</span> that takes in two elements from <span  class="math">\(V\)</span> and outputs another element inside <span  class="math">\(V\)</span></li>
+<li>A definition for a scalar multiplication operation <span  class="math">\(x\)</span> that takes in a real number and one elements from <span  class="math">\(V\)</span> and outputs another element inside <span  class="math">\(V\)</span></li>
+<li>A special &quot;zero&quot; object <span  class="math">\(0\)</span> inside <span  class="math">\(V\)</span></li>
+</ul>
+
+<p>These four objects together need to satisfy eight properties/axioms which are listed <a href="http://mathworld.wolfram.com/VectorSpace.html">here</a>.</p>
+
+<p>One object that qualifes as a vector is a function <span  class="math">\(f(a)\)</span>. We can have a vector space that consists of two functions <span  class="math">\(f(a)\)</span> and <span  class="math">\(g(a)\)</span> and the distinguised element <span  class="math">\(0\)</span> and define operations of addition (<span  class="math">\((f+g)(a)\)</span>) and multiplication (<span  class="math">\((f*g)(a)\)</span>) that satisfy the eight axioms. As a more specific example, we can define the vector space of polynomials of degree 2 as a set that contains the three functions <span  class="math">\(f(x) = 1\)</span>, <span  class="math">\(g(x) = x\)</span> and <span  class="math">\(h(x) = x^2\)</span>. Differentiation <span  class="math">\(d/dx\)</span> is an example of a linear operator that can act on this vector space of polynomials. We can re-write differentiation in a matrix form D as well! This brilliant 3blue1brown <a href="https://www.youtube.com/watch?v=TgKwz5Ikpc8">video</a> captures how.</p>
+
+<p>As an interesting side, because random variables are functions (and hence vectors) too, ideas from linear algebra are easily applied to statistics as well. <a href="https://www.randomservices.org/random/expect/Spaces.html">Here's</a> more info.</p>
+
+<h3 id="basis-of-a-vector-space">Basis of a vector space</h3>
+
+<p>The basis of a vector space is a set of vectors that can be thought of as building blocks of the entire vector space. The set of basis vectors is linearly independent -- none of the vectors inside the set can be written as a weighted sum (aka linear combination) of the other vectors.</p>
+
+<p>For example, the standard basis for ${\Re^{3}}$ is a set of three vectors:
+<span  class="math">\(\begin{bmatrix}1 \\ 0 \\ 0\end{bmatrix}\)</span>, <span  class="math">\(\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix}\)</span>, <span  class="math">\(\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}\)</span>. You can build any vector in ${\Re^{3}}$ using a linear combination of these three.</p>
+
+<p>The dimension of a vector space is defined by the number of basis vectors. The earlier example of a vector space of polynomials of degree 2 has 3 basis vectors (<span  class="math">\(f(x), g(x), h(x)\)</span>) and so it is 3 dimensional. A vector space of all polynomial functions is infinite dimensional.</p>
+
+<h3 id="inner-product-space">Inner product space</h3>
+
+<p>The dot product is a very useful linear operation that helps us intuit geometric notions of lengths and angles between vectors. It takes two vectors from a vector space and outputs a real number. The most common notation for the operation is <span  class="math">\(\langle a, b \rangle = a \cdot b = a^T b = \sum_{i=1}^{n} a_{i} b_{i}\)</span>. It is computed by summing up the element wise products of the two vectors.</p>
+
+<p>Length of a vector <span  class="math">\(v\)</span> is defined by the dot product of <span  class="math">\(v\)</span> with itself <span  class="math">\(|a| = \sqrt{\langle a, a \rangle}\)</span></p>
+
+<p>The angle between two vectors <span  class="math">\(a\)</span> and <span  class="math">\(b\)</span> can also be defined by the dot product <span  class="math">\(\langle a, b \rangle = |a| |b| cos(\theta)\)</span> or <span  class="math">\(\theta = \cos^{-1} (\frac{\langle a, b \rangle}{|a| |b|})\)</span>.</p>
+
+<p>Dot product also gives us the notion of orthogonality. When the dot product of two vectors is <span  class="math">\(0\)</span>, the two vectors are said to be orthogonal. i.e <span  class="math">\(\langle a, b \rangle = |a| |b| cos(\theta) = 0\)</span>, <span  class="math">\(cos(\theta) = 0\)</span> or <span  class="math">\(\theta = \pi/2 = 90^{\circ}\)</span>. When the dot product is 1, the vectors are most &quot;similar&quot; and when the vectors are orthogonal they are least &quot;similar&quot;.</p>
+
+<p>The dot product we have defined so far is a specific example of an inner product (for n-dimensional Euclidean spaces). Just as we did before in abstracting away vector spaces using axioms, we can do the same for inner products. For an operation to qualify as an inner product, it needs to satisfy three axioms listed <a href="https://en.wikipedia.org/wiki/Inner_product_space#Definition">here</a>. One of the axioms enforces the linearity constraint.</p>
+
+<p>An inner product space is a vector space with a defined inner product operation. We generalized the definition of inner product so we can apply it to all kinds of vector spaces including vector spaces of functions.</p>
+
+<p>A particulary convenient basis set is an orthonormal one. An orthonormal basis contains n orthogonal vectors (each vector orthogonal to every other vector) that have unit length (inner product of each basis vector with itself is <span  class="math">\(1\)</span>). For example, the standard basis defined above is orthonormal. Then we can write any vector <span  class="math">\(a\)</span> as a weighted sum of the basis vectors <span  class="math">\(v_{1}..v_{n}\)</span>: <span  class="math">\(a = w_{1}v_{1} + w_{2}v_{2} + ... + w_{n}v_{n}\)</span>. The next natural question then is how to we find the weights <span  class="math">\(w_{i}\)</span>? If <span  class="math">\(a\)</span> is expressed in one basis set eg. standard basis set, then to find the weights in the new basis set of <span  class="math">\(v_{i}s\)</span>, we simply compute the inner product between <span  class="math">\(a\)</span> and <span  class="math">\(v_{i}\)</span>. <span  class="math">\(w_{i} = \langle v_i, a \rangle\)</span>. These new <span  class="math">\(w_{i}\)</span>s are the elements of the same vector expressed in the <span  class="math">\(v_{i}\)</span> basis. We have effectively performed a <em>change of basis.</em></p>
+
+<p>With all the generalizations and abstractions defined, we are ready to apply our general linearity definition and general inner product spaces to understanding the Fourier transform.</p>
+
+<h2 id="example-fourier-transforms-as-linear-transforms">Example: Fourier transforms as linear transforms</h2>
+
+<p>Fourier transforms are ubiquitous in engineering. They allow us to break down any signal/function into a summation of infinitely many sinusoid functions of varying amplitudes and phases. This animation shows how a square waveform is broken into a sum of sines and cosines: 
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="//www.youtube.com/embed/r4c9ojz6hJg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+</p>
+
+<p>The equation for the transformation looks like:</p>
+
+<p>$\mathscr{F}[{f(t)]}=\hat{f}(\omega)$</p>
+
+<p>$\mathscr{F}[{f(t)]}=\int_{-\infty}^{\infty} f(t) e^{-i \omega t} dt$</p>
+
+<p>This is a scary equation at first but with the ideas of vector spaces and linearity, we can interpret this quickly.</p>
+
+<ul>
+<li>It maps a function (aka vector) to another function. The input function is often interpreted as a function of time <span  class="math">\(t\)</span> and the output as a function of frequency <span  class="math">\(\omega\)</span>. The input function <span  class="math">\(f(t)\)</span> comes from the vector space of functions <span  class="math">\(f(t)\)</span> which map a real number (time) to a complex number (eg. signal value, can also just be real). The output function <span  class="math">\(\hat{f}(\omega)\)</span> belongs to the vector space of complex valued functions. <span  class="math">\(\hat{f}(\omega)\)</span> takes in a real valued frequency and outputs a complex value.</li>
+
+<li><p>The complex exponential function i.e <span  class="math">\(e^{i\omega t}\)</span> is very handy in simplifying a lot of math involving sines and cosines. First, using Euler's identity, the complex exponential is simply <span  class="math">\(cos(\omega t) + i sin (\omega t)\)</span>. We can write a cosine or a sine in terms of the complex exponential. <span  class="math">\(cos(\theta) = \frac{e^{i\theta}+e^{-i\theta}}{2}\)</span> and <span  class="math">\(sin(\theta) = \frac{e^{i\theta}-e^{-i\theta}}{2i}\)</span>.
+One example of how it simplifies math is when adding a phase to a cosine wave, <span  class="math">\(e^{i (\theta + \phi)} = e^{i\theta}e^{i\phi}\)</span>. If we tried doing it using trigonomtry, we could get the following complicated relationship: <span  class="math">\(cos(\theta + \phi) = cos(\theta)cos(\phi)-sin(\theta)sin(\phi)\)</span>.</p></li>
+
+<li><p>The integral of the product of the two functions should look similar to the dot product of the two vectors we saw earlier. In fact, the integral is a valid inner product on the vector space of functions. For a finite dimension list of numbers picture of two vectors (i.e vectors in <span  class="math">\(\Re^{n}\)</span>), we defined the inner product as <span  class="math">\(\langle a, b \rangle = a \cdot b = \sum_{i=1}^{n} a_{i}  b_{i}\)</span>. The analogue for an infinite dimensional function space uses calculus: $\langle f, g \rangle = f \cdot g = f(a)g(a)dx + f(a+dx)g(a+dx)dx + f(a+2dx)g(a+2dx) ... = \int_{a}^{b} f(x)g(x)dx$. What we have here with Fourier transforms though are complex-valued functions and to meet the axioms for inner products, we need to modify the inner product to be:
+$\langle f, g \rangle = \int_{a}^{b} f^{*}(x)g(x)dx$. In words, the inner product of two complex-valued functions is given by the integral over the product of the complex-conjugate of one function with the other function.</p></li>
+
+<li><p>The Fourier transform is thus the inner product between two functions -- the input function and the complex exponential evaluated at a particular frequency value. <span  class="math">\(\hat{f}(\omega) = \langle e^{i \omega t}, f \rangle = \int_{-\infty}^{\infty} f(t)e^{-i \omega t}dt\)</span>.</p></li>
+
+<li><p>To summarize, the Fourier transform is a <em>linear</em> operator. Specifically it is an inner product linear operator. It changes the basis of our function/signal <span  class="math">\(f(t)\)</span> into the basis of the complex exponential functions <span  class="math">\(e^{i \omega t}\)</span>. It tells you for a particular given frequency <span  class="math">\(\omega\)</span>, how similar is the input function to a complex exponential of frequency <span  class="math">\(\omega\)</span>.</p></li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>We started off by immediately replacing the straight line picture of linearity into that of hyperplanes. With the system of equations <span  class="math">\(y = Ax\)</span>, we saw concrete examples of what vectors are (list of numbers or points in space) and what a linear function as a matrix <span  class="math">\(A\)</span> is (coefficients of linear equations relating input and output vectors).</p>
+
+<p>We then defined a linear operator (concrete case of the matrix <span  class="math">\(A\)</span>) using the idea of linear superposition. This definition of linearity is perhaps the biggest takeaway.</p>
+
+<p>The big jump in abstraction comes with the definition of vector spaces and how vectors can be more than just lists of numbers. Specifically, we saw how functions can be n-dimensional vectors coming from some vector space of functions. A vector space can be described by a set of basis vectors the number of which define the dimensionality of the vector space.</p>
+
+<p>Last, we applied our generalization of vector spaces to gain a new perspective of the popular Fourier transform; as an inner product between the input function and a complex exponential.</p>
+
+      </div>
+
+      <footer>
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "embedded-sigproc" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    
+     © 2018
+    
+       · 
+      Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-127997927-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+  </body>
+
+</html>

@@ -6,10 +6,20 @@
     <description>Recent content on embedded sigproc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 24 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Dec 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://abhipray.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>What even is linear?</title>
+      <link>https://abhipray.com/posts/sigproc/linearity/</link>
+      <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://abhipray.com/posts/sigproc/linearity/</guid>
+      <description>The list of engineering ideas centered on linearity is endless: linear regression, linear time-invariant (LTI) filter, linear dynamical system, non-linear neural networks etc. Most of these ideas are introduced with a cursorsy view of the significance of linearity. In this post, I want to flip the perspective and make linearity the central theme and elucidate how other ideas depend on it.
+We probably all think straight line when we think of the word linear.</description>
+    </item>
     
     <item>
       <title>PDM-PCM conversion &amp; PDM&#39;s connection to neurons</title>
