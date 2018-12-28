@@ -46,7 +46,7 @@
 MathJax.Hub.Config({
   tex2jax: {
     inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
     processEscapes: true,
     processEnvironments: true,
     displayAlign: "center",
@@ -130,7 +130,7 @@ MathJax.Hub.Config({
 <li>The generalization of the solution set for $n &gt; 2$ is a hyperplane (line in 2D plane, <a href="https://www.wolframalpha.com/input/?i=x%2By%2Bz+%3D+0">a plane in 3D</a>, a cube in 4D etc.). Thus linear does not always imply straight lines.</li>
 </ul>
 
-<h3 id="linear-function--defining-functions-using-equations">Linear function : Defining functions using equations</h3>
+<h3 id="linear-function-defining-functions-using-equations">Linear function: Defining functions using equations</h3>
 
 <p>A function is an association of an element <span  class="math">\(x\)</span> in one set <span  class="math">\(X\)</span> to another element in set <span  class="math">\(Y\)</span>. It is most commonly specified as an equation:</p>
 
@@ -150,7 +150,7 @@ MathJax.Hub.Config({
 
 <p>This gets a little messy so we stack up $x_1...x_n$ into a list of numbers and call the new list object a vector. The vector is said to be <span  class="math">\(n\)</span> dimensional.</p>
 
-<h2 id="system-of-equations---dealing-with-many-variables">System of equations :  Dealing with many variables</h2>
+<h3 id="system-of-equations-dealing-with-many-variables">System of equations: Dealing with many variables</h3>
 
 <p>Algebra provides methods to solve equations and linear algebra to solve linear equations like the one in above. It enables the solving of multiple equations at once i.e a system of equations:</p>
 
@@ -176,7 +176,7 @@ MathJax.Hub.Config({
 
 <h1 id="definition-of-linearity">Definition of linearity</h1>
 
-<h2 id="linear-maptranformationoperation--reinterpreting-y--ax">Linear map/tranformation/operation : Reinterpreting <span  class="math">\(y = Ax\)</span></h2>
+<h2 id="linear-maptranformationoperation-reinterpreting-y--ax">Linear map/tranformation/operation: Reinterpreting <span  class="math">\(y = Ax\)</span></h2>
 
 <p>An operation/transformation/map <span  class="math">\(\mathbb{L}(x)\)</span> takes in an input vector <span  class="math">\(x\)</span> and outputs/transforms/maps to a vector <span  class="math">\(y\)</span>.</p>
 
@@ -192,7 +192,7 @@ MathJax.Hub.Config({
 
 <h1 id="generalizing-vectors">Generalizing vectors</h1>
 
-<h2 id="abstract-vector-space">Abstract vector space</h2>
+<h2 id="abstract-vector-space-where-does-a-vector-come-from">Abstract vector space: Where does a vector come from?</h2>
 
 <p>We just saw how the system of equations picture gives us a notion for what a vector is: a list of numbers. Geometrically, we can think of the list as points in a &quot;space&quot;. If the numbers are real numbers and the list has <span  class="math">\(n\)</span> elements, the vector belongs to a vector space of n-dimensional real-valued points ${\Re^{n}}$.</p>
 
@@ -213,16 +213,16 @@ MathJax.Hub.Config({
 
 <p>As an interesting side, because random variables are functions (and hence vectors) too, ideas from linear algebra are easily applied to statistics as well. <a href="https://www.randomservices.org/random/expect/Spaces.html">Here's</a> more info.</p>
 
-<h3 id="basis-of-a-vector-space">Basis of a vector space</h3>
+<h3 id="basis-of-a-vector-space-describing-a-vector-space">Basis of a vector space: Describing a vector space</h3>
 
 <p>The basis of a vector space is a set of vectors that can be thought of as building blocks of the entire vector space. The set of basis vectors is linearly independent -- none of the vectors inside the set can be written as a weighted sum (aka linear combination) of the other vectors.</p>
 
 <p>For example, the standard basis for ${\Re^{3}}$ is a set of three vectors:
 <span  class="math">\(\begin{bmatrix}1 \\ 0 \\ 0\end{bmatrix}\)</span>, <span  class="math">\(\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix}\)</span>, <span  class="math">\(\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}\)</span>. You can build any vector in ${\Re^{3}}$ using a linear combination of these three.</p>
 
-<p>The dimension of a vector space is defined by the number of basis vectors. The earlier example of a vector space of polynomials of degree 2 has 3 basis vectors (<span  class="math">\(f(x), g(x), h(x)\)</span>) and so it is 3 dimensional. A vector space of all polynomial functions is infinite dimensional.</p>
+<p>The dimension of a vector space is defined by the number of basis vectors. The earlier example of a vector space of polynomials of degree 2 has 3 basis vectors (<span  class="math">\(f(x), g(x), h(x)\)</span>) and so it is 3 dimensional. A vector space of all polynomial functions is infinite dimensional. Note that a vector space can be have infinitely many basis sets.</p>
 
-<h3 id="inner-product-space">Inner product space</h3>
+<h3 id="inner-product-space-equipping-a-vector-space-with-a-powerful-operation">Inner product space: Equipping a vector space with a powerful operation</h3>
 
 <p>The dot product is a very useful linear operation that helps us intuit geometric notions of lengths and angles between vectors. It takes two vectors from a vector space and outputs a real number. The most common notation for the operation is <span  class="math">\(\langle a, b \rangle = a \cdot b = a^T b = \sum_{i=1}^{n} a_{i} b_{i}\)</span>. It is computed by summing up the element wise products of the two vectors.</p>
 
@@ -257,7 +257,7 @@ MathJax.Hub.Config({
 <p>This is a scary equation at first but with the ideas of vector spaces and linearity, we can interpret this quickly.</p>
 
 <ul>
-<li>It maps a function (aka vector) to another function. The input function is often interpreted as a function of time <span  class="math">\(t\)</span> and the output as a function of frequency <span  class="math">\(\omega\)</span>. The input function <span  class="math">\(f(t)\)</span> comes from the vector space of functions <span  class="math">\(f(t)\)</span> which map a real number (time) to a complex number (eg. signal value, can also just be real). The output function <span  class="math">\(\hat{f}(\omega)\)</span> belongs to the vector space of complex valued functions. <span  class="math">\(\hat{f}(\omega)\)</span> takes in a real valued frequency and outputs a complex value.</li>
+<li><p>It maps a function (aka vector) to another function. The input function is often interpreted as a function of time <span  class="math">\(t\)</span> and the output as a function of frequency <span  class="math">\(\omega\)</span>. The input function <span  class="math">\(f(t)\)</span> comes from the vector space of functions <span  class="math">\(f(t)\)</span> which map a real number (time) to a complex number (eg. signal value, can also just be real). Similarly, the output function <span  class="math">\(\hat{f}(\omega)\)</span> belongs to the vector space of complex valued functions. <span  class="math">\(\hat{f}(\omega)\)</span> takes in a real valued frequency and outputs a complex value.</p></li>
 
 <li><p>The complex exponential function i.e <span  class="math">\(e^{i\omega t}\)</span> is very handy in simplifying a lot of math involving sines and cosines. First, using Euler's identity, the complex exponential is simply <span  class="math">\(cos(\omega t) + i sin (\omega t)\)</span>. We can write a cosine or a sine in terms of the complex exponential. <span  class="math">\(cos(\theta) = \frac{e^{i\theta}+e^{-i\theta}}{2}\)</span> and <span  class="math">\(sin(\theta) = \frac{e^{i\theta}-e^{-i\theta}}{2i}\)</span>.
 One example of how it simplifies math is when adding a phase to a cosine wave, <span  class="math">\(e^{i (\theta + \phi)} = e^{i\theta}e^{i\phi}\)</span>. If we tried doing it using trigonomtry, we could get the following complicated relationship: <span  class="math">\(cos(\theta + \phi) = cos(\theta)cos(\phi)-sin(\theta)sin(\phi)\)</span>.</p></li>
@@ -270,7 +270,7 @@ $\langle f, g \rangle = \int_{a}^{b} f^{*}(x)g(x)dx$. In words, the inner produc
 <li><p>To summarize, the Fourier transform is a <em>linear</em> operator. Specifically it is an inner product linear operator. It changes the basis of our function/signal <span  class="math">\(f(t)\)</span> into the basis of the complex exponential functions <span  class="math">\(e^{i \omega t}\)</span>. It tells you for a particular given frequency <span  class="math">\(\omega\)</span>, how similar is the input function to a complex exponential of frequency <span  class="math">\(\omega\)</span>.</p></li>
 </ul>
 
-<h3 id="conclusion">Conclusion</h3>
+<h2 id="conclusion">Conclusion</h2>
 
 <p>We started off by immediately replacing the straight line picture of linearity into that of hyperplanes. With the system of equations <span  class="math">\(y = Ax\)</span>, we saw concrete examples of what vectors are (list of numbers or points in space) and what a linear function as a matrix <span  class="math">\(A\)</span> is (coefficients of linear equations relating input and output vectors).</p>
 
@@ -278,7 +278,7 @@ $\langle f, g \rangle = \int_{a}^{b} f^{*}(x)g(x)dx$. In words, the inner produc
 
 <p>The big jump in abstraction comes with the definition of vector spaces and how vectors can be more than just lists of numbers. Specifically, we saw how functions can be n-dimensional vectors coming from some vector space of functions. A vector space can be described by a set of basis vectors the number of which define the dimensionality of the vector space.</p>
 
-<p>Last, we applied our generalization of vector spaces to gain a new perspective of the popular Fourier transform; as an inner product between the input function and a complex exponential.</p>
+<p>Last, we applied our generalization of vector spaces and linearity to gain a new perspective of the popular Fourier transform; as an inner product between the input function and a complex exponential.</p>
 
       </div>
 

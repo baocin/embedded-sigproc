@@ -26,7 +26,7 @@ ${\displaystyle a_{1}x_{1}+\cdots +a_{n}x_{n}+b=0}$
 
 - The generalization of the solution set for $n > 2$ is a hyperplane (line in 2D plane, [a plane in 3D](https://www.wolframalpha.com/input/?i=x%2By%2Bz+%3D+0), a cube in 4D etc.). Thus linear does not always imply straight lines.
 
-### Linear function : Defining functions using equations
+### Linear function: Defining functions using equations
 
 A function is an association of an element $$x$$ in one set $$X$$ to another element in set $$Y$$. It is most commonly specified as an equation:
 
@@ -46,7 +46,7 @@ ${Y = f(x_{1}, x_{2}...x_{n}) = a_{1}x_{1} + \cdots +a_{n}x_{n} + b}$
 
 This gets a little messy so we stack up $x_1...x_n$ into a list of numbers and call the new list object a vector. The vector is said to be $$n$$ dimensional. 
 
-## System of equations :  Dealing with many variables
+### System of equations: Dealing with many variables
 
 Algebra provides methods to solve equations and linear algebra to solve linear equations like the one in above. It enables the solving of multiple equations at once i.e a system of equations:
 
@@ -72,7 +72,7 @@ The system of equations picture is barely revelatory. It is one specific example
 
 # Definition of linearity
 
-## Linear map/tranformation/operation : Reinterpreting $$y = Ax$$
+## Linear map/tranformation/operation: Reinterpreting $$y = Ax$$
 
 An operation/transformation/map $$\mathbb{L}(x)$$ takes in an input vector $$x$$ and outputs/transforms/maps to a vector $$y$$. 
 
@@ -88,7 +88,7 @@ Before we start applying this definition of linearity we need to paint a better 
 
 # Generalizing vectors
 
-## Abstract vector space
+## Abstract vector space: Where does a vector come from?
 
 We just saw how the system of equations picture gives us a notion for what a vector is: a list of numbers. Geometrically, we can think of the list as points in a "space". If the numbers are real numbers and the list has $$n$$ elements, the vector belongs to a vector space of n-dimensional real-valued points ${\Re^{n}}$. 
 
@@ -107,16 +107,16 @@ One object that qualifes as a vector is a function $$f(a)$$. We can have a vecto
 As an interesting side, because random variables are functions (and hence vectors) too, ideas from linear algebra are easily applied to statistics as well. [Here's](https://www.randomservices.org/random/expect/Spaces.html) more info. 
 
 
-### Basis of a vector space
+### Basis of a vector space: Describing a vector space
 
 The basis of a vector space is a set of vectors that can be thought of as building blocks of the entire vector space. The set of basis vectors is linearly independent -- none of the vectors inside the set can be written as a weighted sum (aka linear combination) of the other vectors.
 
 For example, the standard basis for ${\Re^{3}}$ is a set of three vectors:
 $$\begin{bmatrix}1 \\ 0 \\ 0\end{bmatrix}$$, $$\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix}$$, $$\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}$$. You can build any vector in ${\Re^{3}}$ using a linear combination of these three. 
 
-The dimension of a vector space is defined by the number of basis vectors. The earlier example of a vector space of polynomials of degree 2 has 3 basis vectors ($$f(x), g(x), h(x)$$) and so it is 3 dimensional. A vector space of all polynomial functions is infinite dimensional.
+The dimension of a vector space is defined by the number of basis vectors. The earlier example of a vector space of polynomials of degree 2 has 3 basis vectors ($$f(x), g(x), h(x)$$) and so it is 3 dimensional. A vector space of all polynomial functions is infinite dimensional. Note that a vector space can be have infinitely many basis sets.
 
-### Inner product space
+### Inner product space: Equipping a vector space with a powerful operation
 
 The dot product is a very useful linear operation that helps us intuit geometric notions of lengths and angles between vectors. It takes two vectors from a vector space and outputs a real number. The most common notation for the operation is $$\langle a, b \rangle = a \cdot b = a^T b = \sum_{i=1}^{n} a_{i} b_{i}$$. It is computed by summing up the element wise products of the two vectors.
 
@@ -148,7 +148,8 @@ $\mathscr{F}[\{f(t)\]}=\int_{-\infty}^{\infty} f(t) e^{-i \omega t} dt$
 
 This is a scary equation at first but with the ideas of vector spaces and linearity, we can interpret this quickly. 
 
-- It maps a function (aka vector) to another function. The input function is often interpreted as a function of time $$t$$ and the output as a function of frequency $$\omega$$. The input function $$f(t)$$ comes from the vector space of functions $$f(t)$$ which map a real number (time) to a complex number (eg. signal value, can also just be real). The output function $$\hat{f}(\omega)$$ belongs to the vector space of complex valued functions. $$\hat{f}(\omega)$$ takes in a real valued frequency and outputs a complex value.
+- It maps a function (aka vector) to another function. The input function is often interpreted as a function of time $$t$$ and the output as a function of frequency $$\omega$$. The input function $$f(t)$$ comes from the vector space of functions $$f(t)$$ which map a real number (time) to a complex number (eg. signal value, can also just be real). Similarly, the output function $$\hat{f}(\omega)$$ belongs to the vector space of complex valued functions. $$\hat{f}(\omega)$$ takes in a real valued frequency and outputs a complex value.
+
 - The complex exponential function i.e $$e^{i\omega t}$$ is very handy in simplifying a lot of math involving sines and cosines. First, using Euler's identity, the complex exponential is simply $$cos(\omega t) + i sin (\omega t)$$. We can write a cosine or a sine in terms of the complex exponential. $$cos(\theta) = \frac{e^{i\theta}+e^{-i\theta}}{2}$$ and $$sin(\theta) = \frac{e^{i\theta}-e^{-i\theta}}{2i}$$.
 One example of how it simplifies math is when adding a phase to a cosine wave, $$e^{i (\theta + \phi)} = e^{i\theta}e^{i\phi}$$. If we tried doing it using trigonomtry, we could get the following complicated relationship: $$cos(\theta + \phi) = cos(\theta)cos(\phi)-sin(\theta)sin(\phi)$$.
 
@@ -159,7 +160,7 @@ $\langle f, g \rangle = \int_{a}^{b} f^{*}(x)g(x)dx$. In words, the inner produc
 
 - To summarize, the Fourier transform is a *linear* operator. Specifically it is an inner product linear operator. It changes the basis of our function/signal $$f(t)$$ into the basis of the complex exponential functions $$e^{i \omega t}$$. It tells you for a particular given frequency $$\omega$$, how similar is the input function to a complex exponential of frequency $$\omega$$.
 
-### Conclusion
+## Conclusion
 
 We started off by immediately replacing the straight line picture of linearity into that of hyperplanes. With the system of equations $$y = Ax$$, we saw concrete examples of what vectors are (list of numbers or points in space) and what a linear function as a matrix $$A$$ is (coefficients of linear equations relating input and output vectors). 
 
@@ -167,4 +168,4 @@ We then defined a linear operator (concrete case of the matrix $$A$$) using the 
 
 The big jump in abstraction comes with the definition of vector spaces and how vectors can be more than just lists of numbers. Specifically, we saw how functions can be n-dimensional vectors coming from some vector space of functions. A vector space can be described by a set of basis vectors the number of which define the dimensionality of the vector space. 
 
-Last, we applied our generalization of vector spaces to gain a new perspective of the popular Fourier transform; as an inner product between the input function and a complex exponential.
+Last, we applied our generalization of vector spaces and linearity to gain a new perspective of the popular Fourier transform; as an inner product between the input function and a complex exponential.
