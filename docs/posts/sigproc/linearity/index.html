@@ -11,7 +11,7 @@
 
     
     <title>
-  What even is linear? · embedded sigproc
+  On linearity: straight lines, linear operators &amp; the Fourier transform · embedded sigproc
 </title>
 
     <link rel="canonical" href="https://abhipray.com/posts/sigproc/linearity/">
@@ -87,18 +87,18 @@ MathJax.Hub.Config({
     <article>
       <header>
         <div class="post-title">
-          <h1 class="title">What even is linear?</h1>
+          <h1 class="title">On linearity: straight lines, linear operators &amp; the Fourier transform</h1>
         </div>
         <div class="post-meta">
           <span class="posted-on">
             <i class="far fa-calendar"></i>
-            <time datetime='2018-12-27T00:00:00Z'>
-              December 27, 2018
+            <time datetime='2018-12-31T00:00:00Z'>
+              December 31, 2018
             </time>
           </span>
           <span class="reading-time">
             <i class="far fa-clock"></i>
-            12 minutes read
+            14 minutes read
           </span>
         </div>
       </header>
@@ -106,15 +106,13 @@ MathJax.Hub.Config({
         
       </div>
       <div>
-        <p>The list of engineering ideas centered on linearity is endless: linear regression, linear time-invariant (LTI) filter, linear dynamical system, non-linear neural networks etc. Most of these ideas are introduced with a cursorsy view of the significance of linearity. In this post, I want to flip the perspective and make linearity the central theme and elucidate how other ideas depend on it.</p>
+        <p>The list of engineering ideas centered on linearity is endless: linear regression, linear time-invariant (LTI) filter, linear dynamical system, linearization etc. Most of these ideas are introduced with a cursorsy view of the significance of linearity. In this post, I want to flip the perspective and make linearity the central theme and elucidate how other ideas depend on it.</p>
 
-<p>We probably all think straight line when we think of the word linear. In fact, my first strong association of the word is from physics: the recti<em>linear</em> propagation of light i.e light travels in a straight line. But what do straight lines have to do with all those listed ideas? Can we define linearity in a context independent manner? We’ll start with elementary math and build up a definition that can be applied whenever we encounter the word linear. Ultimately, we'll use the new perspective of linearity in understanding Fourier transforms. My goal in doing this exercise was to replace the straight line mental picture with some other picture that makes more sense and is more useful.</p>
-
-<h1 id="concrete-meaning-of-linear">Concrete meaning of linear</h1>
+<p>We probably all think straight line when we think of the word linear. In fact, my first strong association of the word is from physics: the recti<em>linear</em> propagation of light i.e light travels in a straight line. But what do straight lines have to do with all those listed ideas? Can we define linearity in a more generalized manner? We’ll start with elementary math and build up a definition that can be applied whenever we encounter the word linear. Ultimately, we'll use the new perspective of linearity in understanding a popular linear operator: the Fourier transform. My goal in doing this exercise was to replace the straight line mental picture with a more generalized notion of linearity.</p>
 
 <h2 id="linear-equations-from-straight-lines-to-hyperplanes">Linear equations: From straight lines to hyperplanes</h2>
 
-<p>An equation relates variables with equality and takes the following form for $n$ variables:</p>
+<p>An equation relates variables with equality ($=$). It takes the following form for $n$ variables:</p>
 
 <p>${\displaystyle a_{1}x_{1}+\cdots +a_{n}x_{n}+b=0}$</p>
 
@@ -127,7 +125,7 @@ MathJax.Hub.Config({
 <p><figure><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Linear_Function_Graph.svg/800px-Linear_Function_Graph.svg.png" alt="linear_equation"></figure></p>
 
 <ul>
-<li>The generalization of the solution set for $n &gt; 2$ is a hyperplane (line in 2D plane, <a href="https://www.wolframalpha.com/input/?i=x%2By%2Bz+%3D+0">a plane in 3D</a>, a cube in 4D etc.). Thus linear does not always imply straight lines.</li>
+<li>The generalization of the solution set for $n &gt; 2$ is a hyperplane (line in 2D plane, <a href="https://www.wolframalpha.com/input/?i=x%2By%2Bz+%3D+0">a plane in 3D</a>, a cube in 4D etc.). Hyperplanes are generalizations of straight lines in higher dimesional spaces.</li>
 </ul>
 
 <h3 id="linear-function-defining-functions-using-equations">Linear function: Defining functions using equations</h3>
@@ -152,7 +150,7 @@ MathJax.Hub.Config({
 
 <h3 id="system-of-equations-dealing-with-many-variables">System of equations: Dealing with many variables</h3>
 
-<p>Algebra provides methods to solve equations and linear algebra to solve linear equations like the one in above. It enables the solving of multiple equations at once i.e a system of equations:</p>
+<p>Algebra provides methods to solve equations and linear algebra to solve linear equations like the one in above. It enables the solving of multiple equations i.e a system of equations:</p>
 
 <p>${y_{1} = a_{11}x_{1} + \cdots +a_{1n}x_{n} + b_1}$</p>
 
@@ -162,7 +160,7 @@ MathJax.Hub.Config({
 
 <p>$\vdots$</p>
 
-<p>$y_{n} = a_{n1}x_{1} + \cdots +a_{nn}x_{n} + b$</p>
+<p>$y_{n} = a_{n1}x_{1} + \cdots +a_{nn}x_{n} + b_n$</p>
 
 <p>We stack up the $y_{i}$s into a list and call it the $y$ vector. And replace the coefficients with a matrix $A$:</p>
 
@@ -172,7 +170,7 @@ MathJax.Hub.Config({
 
 <p>This is how linear algebra was first introduced to me. The topic goes into great depth into the properties of the matrix $A$ which captures all the information regarding a linear function. Solving the system refers to finding all the values in the vector <span  class="math">\(x\)</span> that satisfy the equation.</p>
 
-<p>The system of equations picture is barely revelatory. It is one specific example of a more general idea for linearity.</p>
+<p>The system of equations picture of $y=Ax$ is barely revelatory. It mechanically shows how entries of the vector $y$ depend on $x$. There are other interpretations of $A$.</p>
 
 <h1 id="definition-of-linearity">Definition of linearity</h1>
 
@@ -198,7 +196,7 @@ MathJax.Hub.Config({
 
 <p>Now the interesting bit is that a list of numbers is only one example for what a vector can be. You can define other objects as vectors belonging to some vector &quot;space&quot;. We will see examples in a second but before that, here is the general definition of what a vector space is.</p>
 
-<p>A vector space consists of four objects:</p>
+<p>When you think of a vector space, you can think of it as a basket of four objects:</p>
 
 <ul>
 <li>A set <span  class="math">\(V\)</span></li>
@@ -211,7 +209,7 @@ MathJax.Hub.Config({
 
 <p>One object that qualifes as a vector is a function <span  class="math">\(f(a)\)</span>. We can have a vector space that consists of two functions <span  class="math">\(f(a)\)</span> and <span  class="math">\(g(a)\)</span> and the distinguised element <span  class="math">\(0\)</span> and define operations of addition (<span  class="math">\((f+g)(a)\)</span>) and multiplication (<span  class="math">\((f*g)(a)\)</span>) that satisfy the eight axioms. As a more specific example, we can define the vector space of polynomials of degree 2 as a set that contains the three functions <span  class="math">\(f(x) = 1\)</span>, <span  class="math">\(g(x) = x\)</span> and <span  class="math">\(h(x) = x^2\)</span>. Differentiation <span  class="math">\(d/dx\)</span> is an example of a linear operator that can act on this vector space of polynomials. We can re-write differentiation in a matrix form D as well! This brilliant 3blue1brown <a href="https://www.youtube.com/watch?v=TgKwz5Ikpc8">video</a> captures how.</p>
 
-<p>As an interesting side, because random variables are functions (and hence vectors) too, ideas from linear algebra are easily applied to statistics as well. <a href="https://www.randomservices.org/random/expect/Spaces.html">Here's</a> more info.</p>
+<p>As an interesting aside, because random variables are functions (and hence vectors) too, ideas from linear algebra are easily applied to statistics as well. <a href="https://www.randomservices.org/random/expect/Spaces.html">Here's</a> more info.</p>
 
 <h3 id="basis-of-a-vector-space-describing-a-vector-space">Basis of a vector space: Describing a vector space</h3>
 
@@ -262,19 +260,23 @@ MathJax.Hub.Config({
 <li><p>The complex exponential function i.e <span  class="math">\(e^{i\omega t}\)</span> is very handy in simplifying a lot of math involving sines and cosines. First, using Euler's identity, the complex exponential is simply <span  class="math">\(cos(\omega t) + i sin (\omega t)\)</span>. We can write a cosine or a sine in terms of the complex exponential. <span  class="math">\(cos(\theta) = \frac{e^{i\theta}+e^{-i\theta}}{2}\)</span> and <span  class="math">\(sin(\theta) = \frac{e^{i\theta}-e^{-i\theta}}{2i}\)</span>.
 One example of how it simplifies math is when adding a phase to a cosine wave, <span  class="math">\(e^{i (\theta + \phi)} = e^{i\theta}e^{i\phi}\)</span>. If we tried doing it using trigonomtry, we could get the following complicated relationship: <span  class="math">\(cos(\theta + \phi) = cos(\theta)cos(\phi)-sin(\theta)sin(\phi)\)</span>.</p></li>
 
+<li><p>The notion of frequency comes from the fact that the argument for the complex exponential can be interpreted as the rate at which the sine/cosine wave making up the complex exponential completes a full cycle i.e if the sine wave takes T seconds to complete a period $2\pi$, it's frequency is $\omega = 2\pi/T$.</p></li>
+
+<li><p>Aside from practical considerations, the choice of complex expontial might be understood better with the notion of eigenfunctions. Eigenvectors/eigenfunctions are vector objects that pass through a linear operator with only a scaling factor (called the eigenvalue). The set of eigenvectors is a complete basis for the vector space -- we can write every vector as a linear combination of eigenvectors. If we know how a linear operator acts on each eigenvector, then we know everything about the operator; we can decompose any input signal into the basis of eigenvectors, apply the appropriate scaling factors of the linear operator and re-combine to produce the output signal. Complex exponentials are eigenfunctions of linear time-invariant operators. See <a href="https://ptolemy.berkeley.edu/eecs20/week9/lti.html">here</a>.</p></li>
+
 <li><p>The integral of the product of the two functions should look similar to the dot product of the two vectors we saw earlier. In fact, the integral is a valid inner product on the vector space of functions. For a finite dimension list of numbers picture of two vectors (i.e vectors in <span  class="math">\(\Re^{n}\)</span>), we defined the inner product as <span  class="math">\(\langle a, b \rangle = a \cdot b = \sum_{i=1}^{n} a_{i}  b_{i}\)</span>. The analogue for an infinite dimensional function space uses calculus: $\langle f, g \rangle = f \cdot g = f(a)g(a)dx + f(a+dx)g(a+dx)dx + f(a+2dx)g(a+2dx) ... = \int_{a}^{b} f(x)g(x)dx$. What we have here with Fourier transforms though are complex-valued functions and to meet the axioms for inner products, we need to modify the inner product to be:
 $\langle f, g \rangle = \int_{a}^{b} f^{*}(x)g(x)dx$. In words, the inner product of two complex-valued functions is given by the integral over the product of the complex-conjugate of one function with the other function.</p></li>
 
 <li><p>The Fourier transform is thus the inner product between two functions -- the input function and the complex exponential evaluated at a particular frequency value. <span  class="math">\(\hat{f}(\omega) = \langle e^{i \omega t}, f \rangle = \int_{-\infty}^{\infty} f(t)e^{-i \omega t}dt\)</span>.</p></li>
 
-<li><p>To summarize, the Fourier transform is a <em>linear</em> operator. Specifically it is an inner product linear operator. It changes the basis of our function/signal <span  class="math">\(f(t)\)</span> into the basis of the complex exponential functions <span  class="math">\(e^{i \omega t}\)</span>. It tells you for a particular given frequency <span  class="math">\(\omega\)</span>, how similar is the input function to a complex exponential of frequency <span  class="math">\(\omega\)</span>.</p></li>
+<li><p>To summarize, the Fourier transform is a <em>linear</em> operator. Specifically it is an inner product linear operator. It changes the basis of our function/signal <span  class="math">\(f(t)\)</span> into the basis of the complex exponential functions <span  class="math">\(e^{i \omega t}\)</span>. It tells you for a particular given frequency <span  class="math">\(\omega\)</span>, how similar is the input function to a complex exponential of frequency <span  class="math">\(\omega\)</span>. The output of the transform $\hat{f}(\omega)$ then reveals the coefficients of the different complex exponentials evaluated at different $\omega$s. These coefficients are complex-valued and give us a frequency spectrum picture for any signal.</p></li>
 </ul>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>We started off by immediately replacing the straight line picture of linearity into that of hyperplanes. With the system of equations <span  class="math">\(y = Ax\)</span>, we saw concrete examples of what vectors are (list of numbers or points in space) and what a linear function as a matrix <span  class="math">\(A\)</span> is (coefficients of linear equations relating input and output vectors).</p>
+<p>We started off by immediately replacing the straight line picture of linearity with that of hyperplanes. With the system of equations <span  class="math">\(y = Ax\)</span>, we saw concrete examples of what vectors are (list of numbers or points in space) and what a linear function as a matrix <span  class="math">\(A\)</span> is (coefficients of linear equations relating input and output vectors).</p>
 
-<p>We then defined a linear operator (concrete case of the matrix <span  class="math">\(A\)</span>) using the idea of linear superposition. This definition of linearity is perhaps the biggest takeaway.</p>
+<p>We then defined a linear operator (eg. <span  class="math">\(A\)</span> in <span  class="math">\(y=Ax\)</span>) using the idea of linear superposition-- the sum of the scaled outputs of a linear operator to different outputs is equivalent to the output of the linear operator to the sum of the scaled input signals.</p>
 
 <p>The big jump in abstraction comes with the definition of vector spaces and how vectors can be more than just lists of numbers. Specifically, we saw how functions can be n-dimensional vectors coming from some vector space of functions. A vector space can be described by a set of basis vectors the number of which define the dimensionality of the vector space.</p>
 
