@@ -46,7 +46,7 @@ This gets a little messy so we stack up $x_1...x_n$ into a list of numbers and c
 
 ### System of equations: Dealing with many variables
 
-Algebra provides methods to solve equations and linear algebra to solve linear equations like the one in above. It enables the solving of multiple equations i.e a system of equations:
+Algebra provides methods to solve equations and linear algebra to solve linear equations like the one above. It enables the solving of multiple equations i.e a system of equations:
 
 ${y_{1} = a_{11}x_{1} + \cdots +a_{1n}x_{n} + b_1}$ 
 
@@ -81,6 +81,8 @@ $\mathbb{F}(\alpha x_1 + \beta x_2) = \alpha \mathbb{F}(x_1) + \beta \mathbb{F}(
 The equation tells us that if we take two vectors $$x_1$$ and $$x_2$$, scale them with $$\alpha$$ and $$\beta$$ and pass the result through the linear operator then the output is the same as if we had passed each output separately, scaled them and then added the two results to produce the output. This is a strong constraint; it means that the operator acts on each input independently.
 
 In the system of equations picture of $$y = Ax$$, matrix A is a linear operator because it satisfies this superposition property. In fact, every linear function/transformation can be written as a matrix. 
+
+Note that the earlier definition presented for a linear function (eg. ${f(x) = (-a_{2}/a_{1})x-b}$) does not satisfy the superposition property. It does not preserve the origin after the transformation. The earlier definition is technically "linear affine". The $$y = Ax$$ is the linear part; the $$b$$ term adds a translation like in the figure with the straight lines above. The term linear is often confused with affine (especially in calculus) so know that there is a difference. Henceforth, we'll use the definition for linear to mean "satisfying the superposition principle".
 
 Before we start applying this definition of linearity we need to paint a better picture for what a vector is. 
 
