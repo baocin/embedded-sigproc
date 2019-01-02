@@ -78,7 +78,7 @@ Now's the time for the definition of linearity we've been building up to. A map/
 
 $\mathbb{F}(\alpha x_1 + \beta x_2) = \alpha \mathbb{F}(x_1) + \beta \mathbb{F}(x_2)$
 
-The equation tells us that if we take two vectors $$x_1$$ and $$x_2$$, scale them with $$\alpha$$ and $$\beta$$ and pass the result through the linear operator then the output is the same as if we had passed each output separately, scaled them and then added the two results to produce the output. This is a strong constraint; it means that the operator acts on each input independently.
+The equation tells us that if we take two vectors $$x_1$$ and $$x_2$$, scale them with $$\alpha$$ and $$\beta$$ and pass the result through the linear operator then the output is the same as if we had scaled each input and passed them through the operator separately and then added the two results to produce the output. This is a strong constraint; it means that the operator acts on each input independently.
 
 In the system of equations picture of $$y = Ax$$, matrix A is a linear operator because it satisfies this superposition property. In fact, every linear function/transformation can be written as a matrix. 
 
