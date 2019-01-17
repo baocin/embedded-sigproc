@@ -22,7 +22,7 @@ ${\displaystyle a_{1}x_{1}+\cdots +a_{n}x_{n}+b=0}$
 ![linear_equation](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Linear_Function_Graph.svg/800px-Linear_Function_Graph.svg.png)
 
 
-- The generalization of the solution set for $n > 2$ is a hyperplane (line in 2D plane, [a plane in 3D](https://www.wolframalpha.com/input/?i=x%2By%2Bz+%3D+0), a cube in 4D etc.). Hyperplanes are generalizations of straight lines in higher dimesional spaces.
+- The generalization of the solution set for $n > 2$ is a hyperplane (line in 2D plane, [a plane in 3D](https://www.wolframalpha.com/input/?i=x%2By%2Bz+%3D+0), a cube in 4D etc.). Hyperplanes are generalizations of straight lines in higher dimensional spaces.
 
 ### Linear function: Defining functions using equations
 
@@ -76,7 +76,7 @@ An operation/transformation/map $$\mathbb{L}(x)$$ takes in an input vector $$x$$
 
 Now's the time for the definition of linearity we've been building up to. A map/transformation/operation is linear if the superposition property holds:
 
-$\mathbb{F}(\alpha x_1 + \beta x_2) = \alpha \mathbb{F}(x_1) + \beta \mathbb{F}(x_2)$
+$\mathbb{L}(\alpha x_1 + \beta x_2) = \alpha \mathbb{L}(x_1) + \beta \mathbb{L}(x_2)$
 
 The equation tells us that if we take two vectors $$x_1$$ and $$x_2$$, scale them with $$\alpha$$ and $$\beta$$ and pass the result through the linear operator then the output is the same as if we had scaled each input and passed them through the operator separately and then added the two results to produce the output. This is a strong constraint; it means that the operator acts on each input independently.
 
