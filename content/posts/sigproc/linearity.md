@@ -120,11 +120,11 @@ The dimension of a vector space is defined by the number of basis vectors. The e
 
 The dot product is a very useful linear operation that helps us intuit geometric notions of lengths and angles between vectors. It takes two vectors from a vector space and outputs a real number. The most common notation for the operation is $$\langle a, b \rangle = a \cdot b = a^T b = \sum_{i=1}^{n} a_{i} b_{i}$$. It is computed by summing up the element wise products of the two vectors.
 
-Length of a vector $$v$$ is defined by the dot product of $$v$$ with itself $$|a| = \sqrt{\langle a, a \rangle}$$
+Length of a vector $$a$$ is defined by the dot product of $$a$$ with itself $$|a| = \sqrt{\langle a, a \rangle}$$
 
 The angle between two vectors $$a$$ and $$b$$ can also be defined by the dot product $$\langle a, b \rangle = |a| |b| cos(\theta)$$ or $$\theta = \cos^{-1} (\frac{\langle a, b \rangle}{|a| |b|})$$. 
 
-Dot product also gives us the notion of orthogonality. When the dot product of two vectors is $$0$$, the two vectors are said to be orthogonal. i.e $$\langle a, b \rangle = |a| |b| cos(\theta) = 0$$, $$cos(\theta) = 0$$ or $$\theta = \pi/2 = 90^{\circ}$$. When the dot product is 1, the vectors are most "similar" and when the vectors are orthogonal they are least "similar".
+Dot product also gives us the notion of orthogonality. When the dot product of two vectors is $$0$$, the two vectors are said to be orthogonal. i.e $$\langle a, b \rangle = |a| |b| cos(\theta) = 0$$, $$cos(\theta) = 0$$ or $$\theta = \pi/2 = 90^{\circ}$$. When the dot product is $|a| |b|$, the vectors are most "similar" or "co-directional" and when the vectors are orthogonal they are "perpendicular" or least "similar".
 
 The dot product we have defined so far is a specific example of an inner product (for n-dimensional Euclidean spaces). Just as we did before in abstracting away vector spaces using axioms, we can do the same for inner products. For an operation to qualify as an inner product, it needs to satisfy three axioms listed [here](https://en.wikipedia.org/wiki/Inner_product_space#Definition). One of the axioms enforces the linearity constraint.
 

@@ -37,7 +37,7 @@
 
     
 
-    <meta name="generator" content="Hugo 0.49.2" />
+    <meta name="generator" content="Hugo 0.50" />
 
     <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -226,11 +226,11 @@ MathJax.Hub.Config({
 
 <p>The dot product is a very useful linear operation that helps us intuit geometric notions of lengths and angles between vectors. It takes two vectors from a vector space and outputs a real number. The most common notation for the operation is <span  class="math">\(\langle a, b \rangle = a \cdot b = a^T b = \sum_{i=1}^{n} a_{i} b_{i}\)</span>. It is computed by summing up the element wise products of the two vectors.</p>
 
-<p>Length of a vector <span  class="math">\(v\)</span> is defined by the dot product of <span  class="math">\(v\)</span> with itself <span  class="math">\(|a| = \sqrt{\langle a, a \rangle}\)</span></p>
+<p>Length of a vector <span  class="math">\(a\)</span> is defined by the dot product of <span  class="math">\(a\)</span> with itself <span  class="math">\(|a| = \sqrt{\langle a, a \rangle}\)</span></p>
 
 <p>The angle between two vectors <span  class="math">\(a\)</span> and <span  class="math">\(b\)</span> can also be defined by the dot product <span  class="math">\(\langle a, b \rangle = |a| |b| cos(\theta)\)</span> or <span  class="math">\(\theta = \cos^{-1} (\frac{\langle a, b \rangle}{|a| |b|})\)</span>.</p>
 
-<p>Dot product also gives us the notion of orthogonality. When the dot product of two vectors is <span  class="math">\(0\)</span>, the two vectors are said to be orthogonal. i.e <span  class="math">\(\langle a, b \rangle = |a| |b| cos(\theta) = 0\)</span>, <span  class="math">\(cos(\theta) = 0\)</span> or <span  class="math">\(\theta = \pi/2 = 90^{\circ}\)</span>. When the dot product is 1, the vectors are most &quot;similar&quot; and when the vectors are orthogonal they are least &quot;similar&quot;.</p>
+<p>Dot product also gives us the notion of orthogonality. When the dot product of two vectors is <span  class="math">\(0\)</span>, the two vectors are said to be orthogonal. i.e <span  class="math">\(\langle a, b \rangle = |a| |b| cos(\theta) = 0\)</span>, <span  class="math">\(cos(\theta) = 0\)</span> or <span  class="math">\(\theta = \pi/2 = 90^{\circ}\)</span>. When the dot product is $|a| |b|$, the vectors are most &quot;similar&quot; or &quot;co-directional&quot; and when the vectors are orthogonal they are &quot;perpendicular&quot; or least &quot;similar&quot;.</p>
 
 <p>The dot product we have defined so far is a specific example of an inner product (for n-dimensional Euclidean spaces). Just as we did before in abstracting away vector spaces using axioms, we can do the same for inner products. For an operation to qualify as an inner product, it needs to satisfy three axioms listed <a href="https://en.wikipedia.org/wiki/Inner_product_space#Definition">here</a>. One of the axioms enforces the linearity constraint.</p>
 
